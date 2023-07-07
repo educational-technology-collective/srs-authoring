@@ -1,0 +1,28 @@
+{
+    "name": "Ambient Learning Author",
+    "description": "The author-facing side of the spaced repetiiton system project",
+    "version": "1.0",
+    "manifest_version": 3,
+    "icons": {
+        "128": "logo.png"
+    },
+    "action": {
+        "default_title": "Click me",
+        "default_icon": {
+            "128": "logo.png"
+        }
+    },
+    "host_permissions": [
+        "https://*/"
+    ],
+    "permissions": ["activeTab", "tabs", "storage", "sidePanel"],
+    "side_panel": {
+        "default_path": "index.html"
+    },
+    "web_accessible_resources": [
+        {
+            "resources": ["index.html"],
+            "matches": ["https://*/*"]
+        }
+    ]
+}
