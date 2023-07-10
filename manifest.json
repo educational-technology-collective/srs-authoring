@@ -1,6 +1,6 @@
 {
-    "name": "Ambient Learning Author",
-    "description": "The author-facing side of the spaced repetiiton system project",
+    "name": "Ambient Authoring",
+    "description": "The author-facing side of the spaced repetition system project",
     "version": "1.0",
     "manifest_version": 3,
     "icons": {
