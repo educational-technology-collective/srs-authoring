@@ -12,7 +12,7 @@ interface Props {
 
 const LmPane = ({ lmArray, updateArr, handleIndex, index }: Props) => {
   // each field of a currently rendered LM is stored as a state.
-  const [idText, setIdText] = useState("");
+  // const [idText, setIdText] = useState("");
   const [startTimeText, setStartTimeText] = useState("");
   const [endTimeText, setEndTimeText] = useState("");
   const [videoUrlText, setVideoUrlText] = useState("");
@@ -20,7 +20,7 @@ const LmPane = ({ lmArray, updateArr, handleIndex, index }: Props) => {
 
   useEffect(() => {
     if (index >= 0) {
-      setIdText(lmArray[index]._id);
+      // setIdText(lmArray[index]._id);
       setStartTimeText(lmArray[index].startTime);
       setEndTimeText(lmArray[index].endTime);
       setVideoUrlText(lmArray[index].videoUrl);
@@ -77,7 +77,7 @@ const LmPane = ({ lmArray, updateArr, handleIndex, index }: Props) => {
 
     if (index >= 0) {
       newLmArray.splice(index, 1);
-      setIdText("");
+      // setIdText("");
       setStartTimeText("");
       setEndTimeText("");
       setVideoUrlText("");
@@ -172,8 +172,8 @@ const LmPane = ({ lmArray, updateArr, handleIndex, index }: Props) => {
         {mode === "display" && (
           <>
             <div id="lmPaneDisplayContainer">
-              <span className="lmLeftCol lmIdRow">ID:</span>
-              <span className="lmRightCol lmIdRow">{idText}</span>
+              {/* <span className="lmLeftCol lmIdRow">ID:</span>
+              <span className="lmRightCol lmIdRow">{idText}</span> */}
               <span className="lmLeftCol lmStartRow">Start:</span>
               <span className="lmRightCol lmStartRow">{startTimeText}</span>
               <span className="lmLeftCol lmEndRow">End:</span>
@@ -204,8 +204,8 @@ const LmPane = ({ lmArray, updateArr, handleIndex, index }: Props) => {
         {mode === "edit" && (
           <>
             <div id="editFormContainer">
-              <span className="lmLeftCol lmIdRow">ID:</span>
-              <span className="lmRightCol lmIdRow">{idText}</span>
+              {/* <span className="lmLeftCol lmIdRow">ID:</span>
+              <span className="lmRightCol lmIdRow">{idText}</span> */}
               <span className="lmLeftCol lmStartRow">Start:</span>
               <textarea
                 className="lmRightCol lmStartRow"
@@ -251,8 +251,8 @@ const LmPane = ({ lmArray, updateArr, handleIndex, index }: Props) => {
         {mode === "add" && (
           <>
             <div id="addFormContainer">
-              <span className="lmLeftCol lmIdRow">ID:</span>
-              <span className="lmRightCol lmIdRow">ID will automatically be assigned.</span>
+              {/* <span className="lmLeftCol lmIdRow">ID:</span>
+              <span className="lmRightCol lmIdRow">ID will automatically be assigned.</span> */}
               <span className="lmLeftCol lmStartRow">Start:</span>
               <textarea
                 className="lmRightCol lmStartRow"
