@@ -36,6 +36,7 @@ import { flashCard } from "./types";
 // } from "../utilities/logfunction";
 const Card: React.FC<{
   obj: flashCard;
+  isEmpty: boolean;
   // tupleLength: number;
   // cardIndex: number;
   // tupleIndex: number;
@@ -46,6 +47,7 @@ const Card: React.FC<{
   // refTuple: React.RefObject<HTMLInputElement>;
 }> = ({
   obj,
+  isEmpty,
   // tupleLength,
   // cardIndex,
   // tupleIndex,
@@ -170,38 +172,26 @@ const Card: React.FC<{
   // console.log("from Card.tsx:", obj);
 
   // Determine the component and content style based on type of card
-  let cardCompFront, cardCompBack, cardContentStyle: string;
-  if (obj.type === "q") {
-    cardCompFront = <QA obj={obj} clicked={false} />;
+  let cardCompBack, cardContentStyle: string;
+  if (isEmpty) {
     cardCompBack = <QA obj={obj} clicked={true} />;
     cardContentStyle = "card-content qa-card-content";
   } else {
-    cardCompFront = (
-      // <MCQ obj={obj} clicked={clicked} setClickStatus={setClickStatus} handleTestEvaluation={handleTestEvaluation} />
-      <MCQ obj={obj} clicked={false} />
-    );
-    cardCompBack = (
-      // <MCQ obj={obj} clicked={clicked} setClickStatus={setClickStatus} handleTestEvaluation={handleTestEvaluation} />
-      <MCQ obj={obj} clicked={true} />
-    );
-    cardContentStyle = "card-content mcq-card-content";
+    if (obj.type === "q") {
+      cardCompBack = <QA obj={obj} clicked={true} />;
+      cardContentStyle = "card-content qa-card-content";
+    } else {
+      cardCompBack = (
+        // <MCQ obj={obj} clicked={clicked} setClickStatus={setClickStatus} handleTestEvaluation={handleTestEvaluation} />
+        <MCQ obj={obj} clicked={true} />
+      );
+      cardContentStyle = "card-content mcq-card-content";
+    }
   }
 
   // Component Being Rendered
   return (
     <div className="card-wrapper">
-      <IonCard className="card-container">
-        <div className={cardContentStyle}>
-          {/* Front Indicator */}
-          {/* <FrontIndicator indicatorOpacity={indicatorOpacity} /> */}
-
-          {/* Card Component as determined previously */}
-          {cardCompFront}
-
-          {/* Indicators For the Back Page */}
-          {/* <BackIndicator indicatorOpacity={indicatorOpacity} /> */}
-        </div>
-      </IonCard>
       <IonCard className="card-container">
         <div className={cardContentStyle} style={{ background: "rgba(251,255,236,1)" }}>
           {cardCompBack}
