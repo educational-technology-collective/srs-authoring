@@ -61,9 +61,6 @@ function App() {
       .then((res) => {
         updateArr(res);
         setIndex(0);
-
-        // send message to the service worker, so that it can update the state in chrome-services directory.
-        chrome.runtime.sendMessage({ message: "GET from App", data: res });
       })
       .catch((err) => {
         console.log("Error while fetching videoLM:", err);

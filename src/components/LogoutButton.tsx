@@ -5,7 +5,6 @@ const LogoutButton = () => {
 
   const handleClick = () => {
     logout({ logoutParams: { returnTo: window.location.origin + "/index.html" } });
-    // chrome.runtime.sendMessage({ message: "logout" });
   };
 
   return <button onClick={handleClick}>Log Out</button>;

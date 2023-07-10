@@ -179,29 +179,6 @@ const FcPane = ({ lmArray, lmIndex, updateArr }: Props) => {
     console.log("add submit");
   };
 
-  // opening flashcard preview in a popup window
-  // const previewWindow = window.open("", "_blank");
-  // const previewWindowDocument = previewWindow?.document;
-  // const previewWindow = document.createElement("div");
-  // const externalWindow = window.open("", "", "width=390,height=844");
-  // externalWindow?.document.body.appendChild(previewWindow);
-
-  // const [preview, setPreview] = useState<HTMLDivElement | null>(null);
-  // const handlePreview = () => {
-  //   const previewWindow = document.createElement("div");
-  //   const externalWindow = window.open("", "_blank", "width=390,height=844");
-  //   externalWindow?.document.body.appendChild(previewWindow);
-  //   setPreview(previewWindow);
-  // };
-
-  // send message to the service worker, so that it can update the state in chrome-services directory.
-  if (lmIndex >= 0 && flashcards.length >= 0 && fcIndex >= 0) {
-    chrome.runtime.sendMessage({
-      message: "preview",
-      data: flashcards[fcIndex],
-    });
-  }
-
   return (
     <>
       <div id="fcPaneContainer">
@@ -286,7 +263,7 @@ const FcPane = ({ lmArray, lmIndex, updateArr }: Props) => {
             flashcards.length >= 0 &&
             fcIndex >= 0 &&
             createPortal(
-              <PreviewPane flashcard={flashcards[fcIndex]} />,
+              <PreviewPane flashcard={flashcards[fcIndex]} flashcards={flashcards} />,
               document.getElementById("rightPreview") as HTMLElement
             )}
           {/* {lmIndex >= 0 &&
