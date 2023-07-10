@@ -8,7 +8,7 @@ const LandingPage = () => {
         <div id="appIconContainer">
           <img id="appIcon" src="/logo.png" alt="SRS Chrome Extension" />
         </div>
-        <h1>Ambient Learning</h1>
+        <h1>Ambient Authoring</h1>
         <p>Become a catalyst for knowledge.</p>
         <br></br>
         <div id="loginBtnContainer">
