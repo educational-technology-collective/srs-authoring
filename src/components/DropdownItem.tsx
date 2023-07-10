@@ -3,7 +3,7 @@ interface Props {
 }
 
 const DropdownItem = ({ value }: Props) => {
-  return <option value={value}>Visibility: {value}</option>;
+  return <option value={value}>{value}</option>;
 };
 
 export { DropdownItem };
