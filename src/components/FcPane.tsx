@@ -12,22 +12,20 @@ interface Props {
 }
 
 const FcPane = ({ lmArray, lmIndex, updateArr }: Props) => {
-  // set the necessary information as states.
   let initialFcIndex = 0;
 
   if (lmIndex >= 0) {
     if (lmArray[lmIndex].flashcards.length === 0) {
       initialFcIndex = -1;
-      console.log("useEffect init", initialFcIndex);
     }
   } else {
     initialFcIndex = -1;
   }
 
-  console.log("initialFcIndex init", initialFcIndex);
   const [fcIndex, setFcIndex] = useState(initialFcIndex === -1 ? -1 : 0);
   const [mode, setMode] = useState("display");
   const [q2Add, setQ2Add] = useState("m");
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     document.getElementById("rightPreview") ? setLoaded(true) : setLoaded(false);
@@ -35,29 +33,6 @@ const FcPane = ({ lmArray, lmIndex, updateArr }: Props) => {
       setFcIndex(0);
     }
   }, []);
-  const [loaded, setLoaded] = useState(false);
-
-  console.log("fcIndex init", fcIndex);
-  // console.log("lmIndex init", lmIndex);
-  if (lmIndex >= 0) console.log("fclength init", lmArray[lmIndex].flashcards.length);
-  // console.log("el init", document.getElementById("rightPreview"));
-
-  // useEffect(() => {
-  //   if (lmIndex >= 0) {
-  //     // save the list of flashcards associated with the currently rendered LM.
-  //     setFlashcards(lmArray[lmIndex].flashcards);
-  //     if (flashcards.length === 0) {
-  //       setFcIndex(-1);
-  //     } else {
-  //       setFcIndex(fcIndex);
-  //     }
-  //   } else {
-  //     setFlashcards([] as Flashcard[]);
-  //     setFcIndex(-1);
-  //     setMode("display");
-  //     setQ2Add("m");
-  //   }
-  // }, [lmIndex, lmArray, flashcards.length]);
 
   const handlePrev = () => {
     if (lmArray[lmIndex].flashcards.length === 0) {
