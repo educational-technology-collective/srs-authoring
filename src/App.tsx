@@ -42,8 +42,7 @@ const compareLm = (lm1: VideoLm, lm2: VideoLm) => {
 
 function App() {
   const { isAuthenticated, user } = useAuth0();
-  // we may need a state to track current url to trigger a full rerender.
-  // this way the GET request will be sent again.
+
   const lmArray: VideoLm[] = [];
   const [arr, setArr] = useState(lmArray);
 
@@ -53,19 +52,48 @@ function App() {
     setArr(value);
   };
 
+  const getLmPosition = (vlmArr: VideoLm[], value: VideoLm) => {
+    return vlmArr.indexOf(value);
+  };
+
+  // listens to subsequent URL change info sent by the service worker.
+  const [url, setUrl] = useState("");
+  const listener = (request: any) => {
+    setUrl(request.message);
+    return true;
+  };
+
+  chrome.runtime.onMessage.addListener(listener);
+
   useEffect(() => {
-    // switch url to window.location.toString() in prod.
-    makeGetReqWithParam("/lms/search", [
-      ["videoUrl", "https://www.coursera.org/learn/python-data-analysis/lecture/Kgwr5/merging-dataframes"],
-    ])
-      .then((res) => {
-        updateArr(res);
-        setIndex(0);
+    // grab URL when the extension first loads.
+    chrome.tabs
+      .query({ active: true, lastFocusedWindow: true })
+      .then(([tab]) => {
+        if (tab.url) setUrl(tab.url);
       })
       .catch((err) => {
-        console.log("Error while fetching videoLM:", err);
+        console.log("Error while initially fetching URL", err);
       });
-  }, []);
+
+    const videoUrlRegex = /^https:\/\/www.coursera.org\/learn\/.*\/lecture\/.*$/;
+
+    // check if url is valid video.
+    if (url && videoUrlRegex.test(url)) {
+      makeGetReqWithParam("/lms/search", [["videoUrl", url]])
+        .then((res) => {
+          updateArr(res);
+          if (res.length >= 1) {
+            setIndex(0);
+          } else {
+            setIndex(-1);
+          }
+        })
+        .catch((err) => {
+          console.log("Error while fetching videoLM:", err);
+        });
+    }
+  }, [url]);
 
   // lmArray index handling.
   // this index is used to access specific elements of the lmArray.
@@ -84,7 +112,14 @@ function App() {
         <>
           <div id="leftEditor">
             <div id="lmPane">
-              <LmPane lmArray={arr} updateArr={updateArr} handleIndex={handleIndex} index={index} />
+              <LmPane
+                lmArray={arr}
+                updateArr={updateArr}
+                handleIndex={handleIndex}
+                index={index}
+                getLmPosition={getLmPosition}
+                url={url}
+              />
             </div>
             <div id="fcPane">
               <FcPane lmArray={arr} lmIndex={index} updateArr={updateArr} />
