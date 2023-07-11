@@ -19,7 +19,7 @@ const PreviewPane = ({ flashcard, flashcards }: Props) => {
     content: { question: "", answer: {} },
   };
 
-  if (flashcards.length > 0) {
+  if (flashcard && flashcards.length > 0) {
     flashcard2._id = flashcard._id;
     flashcard2.lmid = flashcard.lmId;
     flashcard2.type = flashcard.type;
@@ -28,11 +28,7 @@ const PreviewPane = ({ flashcard, flashcards }: Props) => {
 
   // console.log("previewing:", flashcard2);
 
-  return (
-    <>
-      <Card obj={flashcard2} isEmpty={flashcards.length > 0 ? false : true} />
-    </>
-  );
+  return <>{flashcard && flashcard2 && <Card obj={flashcard2} isEmpty={flashcards.length > 0 ? false : true} />}</>;
 };
 
 export { PreviewPane };

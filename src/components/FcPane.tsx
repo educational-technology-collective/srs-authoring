@@ -1,7 +1,8 @@
 import { FormEvent, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { CardDisplay, CardAdd, CardEdit, FcDropdown, PreviewPane } from ".";
 import { VideoLm, Flashcard } from "../types";
+import { makePostReq, makePutReq, makeDeleteReq } from "../utils";
+import { CardDisplay, CardAdd, CardEdit, FcDropdown, PreviewPane } from ".";
 import "../styles/FcPane.css";
 
 interface Props {
@@ -12,40 +13,69 @@ interface Props {
 
 const FcPane = ({ lmArray, lmIndex, updateArr }: Props) => {
   // set the necessary information as states.
-  const [flashcards, setFlashcards] = useState([] as Flashcard[]);
-  const [fcIndex, setFcIndex] = useState(-1);
+  let initialFcIndex = 0;
+
+  if (lmIndex >= 0) {
+    if (lmArray[lmIndex].flashcards.length === 0) {
+      initialFcIndex = -1;
+      console.log("useEffect init", initialFcIndex);
+    }
+  } else {
+    initialFcIndex = -1;
+  }
+
+  console.log("initialFcIndex init", initialFcIndex);
+  const [fcIndex, setFcIndex] = useState(initialFcIndex === -1 ? -1 : 0);
   const [mode, setMode] = useState("display");
   const [q2Add, setQ2Add] = useState("m");
 
   useEffect(() => {
-    if (lmIndex >= 0) {
-      // save the list of flashcards associated with the currently rendered LM.
-      setFlashcards(lmArray[lmIndex].flashcards);
-      if (flashcards.length === 0) {
-        setFcIndex(-1);
-      } else {
-        setFcIndex(0);
-      }
+    document.getElementById("rightPreview") ? setLoaded(true) : setLoaded(false);
+    if (initialFcIndex !== -1) {
+      setFcIndex(0);
     }
-  }, [lmIndex, lmArray, flashcards.length]);
+  }, []);
+  const [loaded, setLoaded] = useState(false);
+
+  console.log("fcIndex init", fcIndex);
+  // console.log("lmIndex init", lmIndex);
+  if (lmIndex >= 0) console.log("fclength init", lmArray[lmIndex].flashcards.length);
+  // console.log("el init", document.getElementById("rightPreview"));
+
+  // useEffect(() => {
+  //   if (lmIndex >= 0) {
+  //     // save the list of flashcards associated with the currently rendered LM.
+  //     setFlashcards(lmArray[lmIndex].flashcards);
+  //     if (flashcards.length === 0) {
+  //       setFcIndex(-1);
+  //     } else {
+  //       setFcIndex(fcIndex);
+  //     }
+  //   } else {
+  //     setFlashcards([] as Flashcard[]);
+  //     setFcIndex(-1);
+  //     setMode("display");
+  //     setQ2Add("m");
+  //   }
+  // }, [lmIndex, lmArray, flashcards.length]);
 
   const handlePrev = () => {
-    if (flashcards.length === 0) {
+    if (lmArray[lmIndex].flashcards.length === 0) {
       return;
     }
 
     if (fcIndex === 0) {
-      setFcIndex(flashcards.length - 1);
+      setFcIndex(lmArray[lmIndex].flashcards.length - 1);
     } else {
-      setFcIndex((fcIndex - 1) % flashcards.length);
+      setFcIndex((fcIndex - 1) % lmArray[lmIndex].flashcards.length);
     }
   };
 
   const handleNext = () => {
-    if (flashcards.length === 0) {
+    if (lmArray[lmIndex].flashcards.length === 0) {
       return;
     }
-    setFcIndex((fcIndex + 1) % flashcards.length);
+    setFcIndex((fcIndex + 1) % lmArray[lmIndex].flashcards.length);
   };
 
   // temporary buffer to store add and edit information.
@@ -68,35 +98,39 @@ const FcPane = ({ lmArray, lmIndex, updateArr }: Props) => {
   };
 
   const handleEdit = () => {
-    if (flashcards.length === 0) {
+    if (lmArray[lmIndex].flashcards.length === 0) {
       return;
     }
     setMode("edit");
   };
 
   const handleDelete = () => {
-    if (flashcards.length === 0) {
+    if (lmArray[lmIndex].flashcards.length === 0) {
       return;
     }
 
     // create a new flashcard array without the flashcard that we deleted.
     // then apply those changes to a new LM array.
     const newLmArray: VideoLm[] = JSON.parse(JSON.stringify(lmArray));
-    const newFlashcards: Flashcard[] = JSON.parse(JSON.stringify(flashcards));
+    const newFlashcards: Flashcard[] = JSON.parse(JSON.stringify(lmArray[lmIndex].flashcards));
     if (fcIndex >= 0) {
+      // push changes to server
+      makeDeleteReq(`/flashcards/id/${lmArray[lmIndex].flashcards[fcIndex]._id}`);
+
       newFlashcards.splice(fcIndex, 1);
-      setFlashcards(newFlashcards);
+      // setFlashcards(newFlashcards);
       newLmArray[lmIndex].flashcards = JSON.parse(JSON.stringify(newFlashcards));
       updateArr(newLmArray);
-
-      // push changes to server
-      // makeDeleteReq(`/flashcards/id/${fcId}`);
     }
 
-    if (flashcards.length === 1) {
+    if (lmArray[lmIndex].flashcards.length === 1) {
       setFcIndex(-1);
     } else {
-      setFcIndex(0);
+      if (fcIndex === 0) {
+        setFcIndex(0);
+      } else {
+        setFcIndex(fcIndex - 1);
+      }
     }
 
     setMode("display");
@@ -116,9 +150,9 @@ const FcPane = ({ lmArray, lmIndex, updateArr }: Props) => {
     const newLmArray = JSON.parse(JSON.stringify(lmArray));
 
     newLmArray[lmIndex].flashcards[fcIndex].content.question = qBuffer;
-    if (flashcards[fcIndex].type === "m") {
+    if (lmArray[lmIndex].flashcards[fcIndex].type === "m") {
       newLmArray[lmIndex].flashcards[fcIndex].content.answer = JSON.parse(mcqAnsBuffer);
-    } else if (flashcards[fcIndex].type === "q") {
+    } else if (lmArray[lmIndex].flashcards[fcIndex].type === "q") {
       newLmArray[lmIndex].flashcards[fcIndex].content.answer = qaAnsBuffer;
     }
 
@@ -127,7 +161,7 @@ const FcPane = ({ lmArray, lmIndex, updateArr }: Props) => {
     // push changes to server
     const payload = newLmArray[lmIndex].flashcards[fcIndex];
     console.log("payload:", payload);
-    // makePutReq("/flashcards", payload);
+    makePutReq("/flashcards", payload);
 
     setMode("display");
     console.log("edit submit");
@@ -158,23 +192,35 @@ const FcPane = ({ lmArray, lmIndex, updateArr }: Props) => {
 
     if (q2Add === "m") {
       newMcqFc.content.answer = JSON.parse(mcqAnsBuffer);
-      newLmArray[lmIndex].flashcards.push(newMcqFc);
 
       // push changes to server.
       const payload = newMcqFc;
       console.log("payload:", payload);
-      // makePostReq("/flashcards", payload);
+      makePostReq("/flashcards", payload)
+        .then((res) => {
+          newMcqFc._id = res._id;
+        })
+        .catch((e) => console.log(e));
+
+      newLmArray[lmIndex].flashcards.push(newMcqFc);
+      updateArr(newLmArray);
+      setFcIndex(newLmArray[lmIndex].flashcards.length - 1);
     } else if (q2Add === "q") {
       newQaFc.content.answer = qaAnsBuffer;
-      newLmArray[lmIndex].flashcards.push(newQaFc);
+
       // push changes to server.
       const payload = newQaFc;
       console.log("payload:", payload);
-      // makePostReq("/flashcards", payload);
+      makePostReq("/flashcards", payload)
+        .then((res) => {
+          newQaFc._id = res._id;
+        })
+        .catch((e) => console.log(e));
+
+      newLmArray[lmIndex].flashcards.push(newQaFc);
+      updateArr(newLmArray);
+      setFcIndex(newLmArray[lmIndex].flashcards.length - 1);
     }
-
-    updateArr(newLmArray);
-
     setMode("display");
     console.log("add submit");
   };
@@ -190,15 +236,16 @@ const FcPane = ({ lmArray, lmIndex, updateArr }: Props) => {
               &lt;
             </button>
             <span id="fcCounter">
-              {fcIndex + 1} / {flashcards.length}
+              {lmIndex >= 0 ? fcIndex + 1 : 0} / {lmIndex >= 0 ? lmArray[lmIndex].flashcards.length : 0}
             </span>
+            {/* <span id="fcCounter">{fcIndex + 1 / lmArray[lmIndex].flashcards.length}</span> */}
             <button id="nextCardBtn" onClick={handleNext}>
               &gt;
             </button>
           </div>
         </div>
         <div id="fcPaneFcContainer">
-          {lmIndex >= 0 && mode === "display" && <CardDisplay card={flashcards[fcIndex]} />}
+          {lmIndex >= 0 && mode === "display" && <CardDisplay card={lmArray[lmIndex].flashcards[fcIndex]} />}
           {lmIndex >= 0 && mode === "add" && (
             <CardAdd
               handleAddSubmit={handleAddSubmit}
@@ -213,7 +260,7 @@ const FcPane = ({ lmArray, lmIndex, updateArr }: Props) => {
           )}
           {lmIndex >= 0 && mode === "edit" && (
             <CardEdit
-              card={flashcards[fcIndex]}
+              card={lmArray[lmIndex].flashcards[fcIndex]}
               handleEditSubmit={handleEditSubmit}
               qBuffer={qBuffer}
               mcqAnsBuffer={mcqAnsBuffer}
@@ -227,13 +274,7 @@ const FcPane = ({ lmArray, lmIndex, updateArr }: Props) => {
         <div id="fcPaneBottomBarContainer">
           <div id="fcPaneVisibilityMenuContainer">
             {mode === "display" && (
-              <FcDropdown
-                lmArray={lmArray}
-                updateArr={updateArr}
-                lmIndex={lmIndex}
-                flashcards={flashcards}
-                fcIndex={fcIndex}
-              />
+              <FcDropdown lmArray={lmArray} updateArr={updateArr} lmIndex={lmIndex} fcIndex={fcIndex} />
             )}
           </div>
           <div id="fcPaneBtnContainer">
@@ -260,10 +301,11 @@ const FcPane = ({ lmArray, lmIndex, updateArr }: Props) => {
         <div id="previewPane">
           {/* {lmIndex >= 0 && flashcards.length >= 0 && fcIndex >= 0 && <PreviewPane flashcard={flashcards[fcIndex]} />} */}
           {lmIndex >= 0 &&
-            flashcards.length >= 0 &&
+            lmArray[lmIndex].flashcards.length >= 0 &&
             fcIndex >= 0 &&
+            loaded &&
             createPortal(
-              <PreviewPane flashcard={flashcards[fcIndex]} flashcards={flashcards} />,
+              <PreviewPane flashcard={lmArray[lmIndex].flashcards[fcIndex]} flashcards={lmArray[lmIndex].flashcards} />,
               document.getElementById("rightPreview") as HTMLElement
             )}
           {/* {lmIndex >= 0 &&

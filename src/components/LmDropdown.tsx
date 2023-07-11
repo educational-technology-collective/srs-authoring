@@ -1,5 +1,6 @@
 import { DropdownItem } from "./DropdownItem";
 import { VideoLm } from "../types";
+import { makePutReq } from "../utils";
 import "../styles/LmDropdown.css";
 
 interface Props {
@@ -20,7 +21,7 @@ const LmDropdown = ({ lmArray, updateArr, index }: Props) => {
       // push changes to server.
       const payload = newLmArray[index];
       console.log("payload:", payload);
-      // makePutReq("/lms", payload);
+      makePutReq("/lms", payload);
     }
   };
 

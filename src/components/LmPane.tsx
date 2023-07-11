@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { VideoLm } from "../types";
+import { makePostReq, makePutReq, makeDeleteReq } from "../utils";
 import { LmDropdown } from ".";
 import "../styles/LmPane.css";
 
@@ -8,9 +9,11 @@ interface Props {
   updateArr: (value: VideoLm[]) => void;
   handleIndex: (value: number) => void;
   index: number;
+  getLmPosition: (vlmArr: VideoLm[], value: VideoLm) => number;
+  url: string;
 }
 
-const LmPane = ({ lmArray, updateArr, handleIndex, index }: Props) => {
+const LmPane = ({ lmArray, updateArr, handleIndex, index, getLmPosition, url }: Props) => {
   // each field of a currently rendered LM is stored as a state.
   // const [idText, setIdText] = useState("");
   const [startTimeText, setStartTimeText] = useState("");
@@ -32,6 +35,11 @@ const LmPane = ({ lmArray, updateArr, handleIndex, index }: Props) => {
           setConceptsText(conceptsText + ", " + concept);
         }
       });
+    } else {
+      setStartTimeText("");
+      setEndTimeText("");
+      setVideoUrlText("");
+      setConceptsText("");
     }
   }, [index, lmArray]);
 
@@ -65,7 +73,7 @@ const LmPane = ({ lmArray, updateArr, handleIndex, index }: Props) => {
     // flush the buffer to provide empty fields.
     setStartTimeTempText("");
     setEndTimeTempText("");
-    setVideoUrlTempText("");
+    setVideoUrlTempText(url);
     setConceptsTempText("");
     setMode("add");
   };
@@ -76,6 +84,9 @@ const LmPane = ({ lmArray, updateArr, handleIndex, index }: Props) => {
     const newLmArray: VideoLm[] = JSON.parse(JSON.stringify(lmArray));
 
     if (index >= 0) {
+      // push changes to server
+      makeDeleteReq(`/lms/id/${lmArray[index]._id}`);
+
       newLmArray.splice(index, 1);
       // setIdText("");
       setStartTimeText("");
@@ -90,8 +101,6 @@ const LmPane = ({ lmArray, updateArr, handleIndex, index }: Props) => {
       }
 
       updateArr(newLmArray);
-
-      // makeDeleteReq(`/lms/id/${lmId}`);
     }
   };
 
@@ -108,6 +117,13 @@ const LmPane = ({ lmArray, updateArr, handleIndex, index }: Props) => {
       newLmArray[index].endTime = endTimeTempText;
       newLmArray[index].videoUrl = videoUrlTempText;
       newLmArray[index].concepts = conceptsTempText.split(", ");
+
+      // push changes to server.
+      const payload = newLmArray[index];
+      console.log("payload:", payload);
+      makePutReq("/lms", payload);
+
+      updateArr(newLmArray);
     } else if (mode === "add") {
       const newLm: VideoLm = {
         _id: "",
@@ -119,27 +135,27 @@ const LmPane = ({ lmArray, updateArr, handleIndex, index }: Props) => {
         visibility: "Development",
       };
 
+      // push changes to server.
+      const payload = newLm;
+      console.log("payload:", payload);
+      makePostReq("/lms", payload)
+        .then((res) => {
+          newLm._id = res._id;
+        })
+        .catch((e) => console.log(e));
+
       newLmArray.push(newLm);
-      handleIndex(newLmArray.length - 1);
-    }
-
-    updateArr(newLmArray);
-
-    // push changes to server.
-    if (mode === "add") {
-      const payload = newLmArray[newLmArray.length - 1];
-      console.log("payload:", payload);
-      // makePostReq("/lms", payload);
-    } else if (mode === "edit") {
-      const payload = newLmArray[index];
-      console.log("payload:", payload);
-      // makePutReq("/lms", payload);
+      updateArr(newLmArray);
+      handleIndex(getLmPosition(newLmArray, newLm));
     }
 
     setMode("display");
   };
 
   const handlePrev = () => {
+    if (lmArray.length === 0) {
+      return;
+    }
     if (index === 0) {
       handleIndex(lmArray.length - 1);
     } else {
@@ -148,6 +164,9 @@ const LmPane = ({ lmArray, updateArr, handleIndex, index }: Props) => {
   };
 
   const handleNext = () => {
+    if (lmArray.length === 0) {
+      return;
+    }
     handleIndex((index + 1) % lmArray.length);
   };
 
