@@ -8,7 +8,7 @@ import "./styles/App.css";
 // sorts LMs by their start time.
 const compareLm = (lm1: VideoLm, lm2: VideoLm) => {
   // convert time string to time
-  const lm1TimeStrs = lm1.startTime.split(":");
+  const lm1TimeStrs = lm1.content.startTime.split(":");
 
   let lm1StartTime = 0;
   if (lm1TimeStrs.length === 1) {
@@ -23,7 +23,7 @@ const compareLm = (lm1: VideoLm, lm2: VideoLm) => {
   }
 
   // convert time string to time
-  const lm2TimeStrs = lm2.startTime.split(":");
+  const lm2TimeStrs = lm2.content.startTime.split(":");
 
   let lm2StartTime = 0;
   if (lm2TimeStrs.length === 1) {
@@ -95,6 +95,11 @@ function App() {
     }
   }, [url]);
 
+  const [loaded, setLoaded] = useState(false);
+  useEffect(() => {
+    document.getElementById("rightPreview") ? setLoaded(true) : setLoaded(false);
+  }, [document.getElementById("rightPreview")]);
+
   // lmArray index handling.
   // this index is used to access specific elements of the lmArray.
   const [index, setIndex] = useState(-1);
@@ -122,7 +127,7 @@ function App() {
               />
             </div>
             <div id="fcPane">
-              <FcPane lmArray={arr} lmIndex={index} updateArr={updateArr} />
+              <FcPane lmArray={arr} lmIndex={index} updateArr={updateArr} loaded={loaded} />
             </div>
             <div id="authPane">
               <p>Welcone, {user?.name}.</p>

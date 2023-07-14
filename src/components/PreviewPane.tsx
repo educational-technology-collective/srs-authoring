@@ -9,8 +9,6 @@ interface Props {
 }
 
 const PreviewPane = ({ flashcard, flashcards }: Props) => {
-  console.log("original:", flashcard);
-
   // convert from one interface to another
   let flashcard2: flashCard = {
     _id: "",

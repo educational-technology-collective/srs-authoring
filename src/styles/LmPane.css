@@ -34,10 +34,9 @@
 .lmRightCol {
     grid-column: 2 / 3;
     overflow-y: auto;
-    
 }
 
-.lmIdRow {
+.lmTypeRow {
     grid-row: 1 / 2;
 }
 

@@ -15,7 +15,7 @@ interface Props {
 
 const LmPane = ({ lmArray, updateArr, handleIndex, index, getLmPosition, url }: Props) => {
   // each field of a currently rendered LM is stored as a state.
-  // const [idText, setIdText] = useState("");
+  const [typeText, setTypeText] = useState("");
   const [startTimeText, setStartTimeText] = useState("");
   const [endTimeText, setEndTimeText] = useState("");
   const [videoUrlText, setVideoUrlText] = useState("");
@@ -23,12 +23,12 @@ const LmPane = ({ lmArray, updateArr, handleIndex, index, getLmPosition, url }: 
 
   useEffect(() => {
     if (index >= 0) {
-      // setIdText(lmArray[index]._id);
-      setStartTimeText(lmArray[index].startTime);
-      setEndTimeText(lmArray[index].endTime);
-      setVideoUrlText(lmArray[index].videoUrl);
+      setTypeText(lmArray[index].type);
+      setStartTimeText(lmArray[index].content.startTime);
+      setEndTimeText(lmArray[index].content.endTime);
+      setVideoUrlText(lmArray[index].content.videoUrl);
 
-      lmArray[index].concepts.forEach((concept, i) => {
+      lmArray[index].content.concepts.forEach((concept, i) => {
         if (i === 0) {
           setConceptsText(concept);
         } else {
@@ -36,6 +36,7 @@ const LmPane = ({ lmArray, updateArr, handleIndex, index, getLmPosition, url }: 
         }
       });
     } else {
+      setTypeText("");
       setStartTimeText("");
       setEndTimeText("");
       setVideoUrlText("");
@@ -44,6 +45,7 @@ const LmPane = ({ lmArray, updateArr, handleIndex, index, getLmPosition, url }: 
   }, [index, lmArray]);
 
   // temporary text states used for adding and editing LMs.
+  const [typeTempText, setTypeTempText] = useState("");
   const [startTimeTempText, setStartTimeTempText] = useState("");
   const [endTimeTempText, setEndTimeTempText] = useState("");
   const [videoUrlTempText, setVideoUrlTempText] = useState("");
@@ -54,11 +56,12 @@ const LmPane = ({ lmArray, updateArr, handleIndex, index, getLmPosition, url }: 
 
   const handleEdit = () => {
     // pre-populate fields with existing values.
-    setStartTimeTempText(lmArray[index].startTime);
-    setEndTimeTempText(lmArray[index].endTime);
-    setVideoUrlTempText(lmArray[index].videoUrl);
+    setTypeTempText(lmArray[index].type);
+    setStartTimeTempText(lmArray[index].content.startTime);
+    setEndTimeTempText(lmArray[index].content.endTime);
+    setVideoUrlTempText(lmArray[index].content.videoUrl);
     let ctt = "";
-    lmArray[index].concepts.forEach((concept, i) => {
+    lmArray[index].content.concepts.forEach((concept, i) => {
       if (i === 0) {
         ctt = concept;
       } else {
@@ -71,6 +74,7 @@ const LmPane = ({ lmArray, updateArr, handleIndex, index, getLmPosition, url }: 
 
   const handleAdd = () => {
     // flush the buffer to provide empty fields.
+    setTypeTempText("");
     setStartTimeTempText("");
     setEndTimeTempText("");
     setVideoUrlTempText(url);
@@ -88,7 +92,7 @@ const LmPane = ({ lmArray, updateArr, handleIndex, index, getLmPosition, url }: 
       makeDeleteReq(`/lms/id/${lmArray[index]._id}`);
 
       newLmArray.splice(index, 1);
-      // setIdText("");
+      setTypeTempText("");
       setStartTimeText("");
       setEndTimeText("");
       setVideoUrlText("");
@@ -113,10 +117,11 @@ const LmPane = ({ lmArray, updateArr, handleIndex, index, getLmPosition, url }: 
     const newLmArray: VideoLm[] = JSON.parse(JSON.stringify(lmArray));
 
     if (mode === "edit") {
-      newLmArray[index].startTime = startTimeTempText;
-      newLmArray[index].endTime = endTimeTempText;
-      newLmArray[index].videoUrl = videoUrlTempText;
-      newLmArray[index].concepts = conceptsTempText.split(", ");
+      newLmArray[index].type = typeTempText;
+      newLmArray[index].content.startTime = startTimeTempText;
+      newLmArray[index].content.endTime = endTimeTempText;
+      newLmArray[index].content.videoUrl = videoUrlTempText;
+      newLmArray[index].content.concepts = conceptsTempText.split(", ");
 
       // push changes to server.
       const payload = newLmArray[index];
@@ -127,10 +132,13 @@ const LmPane = ({ lmArray, updateArr, handleIndex, index, getLmPosition, url }: 
     } else if (mode === "add") {
       const newLm: VideoLm = {
         _id: "",
-        startTime: startTimeTempText,
-        endTime: endTimeTempText,
-        videoUrl: videoUrlTempText,
-        concepts: conceptsTempText.split(", "),
+        type: typeTempText,
+        content: {
+          startTime: startTimeTempText,
+          endTime: endTimeTempText,
+          videoUrl: videoUrlTempText,
+          concepts: conceptsTempText.split(", "),
+        },
         flashcards: [],
         visibility: "Development",
       };
@@ -191,8 +199,8 @@ const LmPane = ({ lmArray, updateArr, handleIndex, index, getLmPosition, url }: 
         {mode === "display" && (
           <>
             <div id="lmPaneDisplayContainer">
-              {/* <span className="lmLeftCol lmIdRow">ID:</span>
-              <span className="lmRightCol lmIdRow">{idText}</span> */}
+              <span className="lmLeftCol lmTypeRow">Type:</span>
+              <span className="lmRightCol lmTypeRow">{typeText}</span>
               <span className="lmLeftCol lmStartRow">Start:</span>
               <span className="lmRightCol lmStartRow">{startTimeText}</span>
               <span className="lmLeftCol lmEndRow">End:</span>
@@ -223,8 +231,12 @@ const LmPane = ({ lmArray, updateArr, handleIndex, index, getLmPosition, url }: 
         {mode === "edit" && (
           <>
             <div id="editFormContainer">
-              {/* <span className="lmLeftCol lmIdRow">ID:</span>
-              <span className="lmRightCol lmIdRow">{idText}</span> */}
+              <span className="lmLeftCol lmTypeRow">Type:</span>
+              <textarea
+                className="lmRightCol lmTypeRow"
+                value={typeTempText}
+                onChange={(e) => setTypeTempText(e.target.value)}
+              ></textarea>
               <span className="lmLeftCol lmStartRow">Start:</span>
               <textarea
                 className="lmRightCol lmStartRow"
@@ -270,8 +282,12 @@ const LmPane = ({ lmArray, updateArr, handleIndex, index, getLmPosition, url }: 
         {mode === "add" && (
           <>
             <div id="addFormContainer">
-              {/* <span className="lmLeftCol lmIdRow">ID:</span>
-              <span className="lmRightCol lmIdRow">ID will automatically be assigned.</span> */}
+              <span className="lmLeftCol lmTypeRow">Type:</span>
+              <textarea
+                className="lmRightCol lmTypeRow"
+                value={typeTempText}
+                onChange={(e) => setTypeTempText(e.target.value)}
+              ></textarea>
               <span className="lmLeftCol lmStartRow">Start:</span>
               <textarea
                 className="lmRightCol lmStartRow"

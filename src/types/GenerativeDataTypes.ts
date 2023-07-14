@@ -14,16 +14,32 @@ export interface Flashcard {
   visibility: string;
 }
 
-export interface VideoLm {
+// export interface VideoLm {
+//   _id: string;
+//   videoUrl: string;
+//   startTime: string;
+//   endTime: string;
+//   concepts: string[]; // for frontend use
+//   flashcards: Flashcard[]; // for frontend use
+//   visibility: string;
+// }
+
+export interface Lm {
   _id: string;
-  videoUrl: string;
-  startTime: string;
-  endTime: string;
-  concepts: string[]; // for frontend use
-  flashcards: Flashcard[]; // for frontend use
+  type: string;
+  content: object;
   visibility: string;
 }
 
-export interface Lm {
-  id: string;
+export interface VideoLm {
+  _id: string;
+  type: string;
+  content: {
+    videoUrl: string;
+    startTime: string;
+    endTime: string;
+    concepts: string[];
+  };
+  flashcards: Flashcard[];
+  visibility: string;
 }

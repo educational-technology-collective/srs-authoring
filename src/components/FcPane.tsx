@@ -9,30 +9,20 @@ interface Props {
   lmArray: VideoLm[];
   lmIndex: number;
   updateArr: (value: VideoLm[]) => void;
+  loaded: boolean;
 }
 
-const FcPane = ({ lmArray, lmIndex, updateArr }: Props) => {
-  let initialFcIndex = 0;
-
-  if (lmIndex >= 0) {
-    if (lmArray[lmIndex].flashcards.length === 0) {
-      initialFcIndex = -1;
-    }
-  } else {
-    initialFcIndex = -1;
-  }
-
-  const [fcIndex, setFcIndex] = useState(initialFcIndex === -1 ? -1 : 0);
-  const [mode, setMode] = useState("display");
-  const [q2Add, setQ2Add] = useState("m");
-  const [loaded, setLoaded] = useState(false);
+const FcPane = ({ lmArray, lmIndex, updateArr, loaded }: Props) => {
+  const [fcIndex, setFcIndex] = useState(-1);
 
   useEffect(() => {
-    document.getElementById("rightPreview") ? setLoaded(true) : setLoaded(false);
-    if (initialFcIndex !== -1) {
+    if (lmIndex >= 0 && lmArray[lmIndex].flashcards.length > 0) {
       setFcIndex(0);
     }
-  }, []);
+  }, [lmArray, lmIndex]);
+
+  const [mode, setMode] = useState("display");
+  const [q2Add, setQ2Add] = useState("m");
 
   const handlePrev = () => {
     if (lmArray[lmIndex].flashcards.length === 0) {
@@ -122,7 +112,7 @@ const FcPane = ({ lmArray, lmIndex, updateArr }: Props) => {
     e.preventDefault();
 
     // update lmArray object.
-    const newLmArray = JSON.parse(JSON.stringify(lmArray));
+    const newLmArray: VideoLm[] = JSON.parse(JSON.stringify(lmArray));
 
     newLmArray[lmIndex].flashcards[fcIndex].content.question = qBuffer;
     if (lmArray[lmIndex].flashcards[fcIndex].type === "m") {
@@ -146,7 +136,7 @@ const FcPane = ({ lmArray, lmIndex, updateArr }: Props) => {
     e.preventDefault();
 
     // update lmArray object.
-    const newLmArray = JSON.parse(JSON.stringify(lmArray));
+    const newLmArray: VideoLm[] = JSON.parse(JSON.stringify(lmArray));
 
     // build new flashcards.
     const newMcqFc: Flashcard = {
@@ -211,7 +201,8 @@ const FcPane = ({ lmArray, lmIndex, updateArr }: Props) => {
               &lt;
             </button>
             <span id="fcCounter">
-              {lmIndex >= 0 ? fcIndex + 1 : 0} / {lmIndex >= 0 ? lmArray[lmIndex].flashcards.length : 0}
+              {lmIndex >= 0 && lmArray[lmIndex].flashcards.length > 0 ? fcIndex + 1 : 0} /{" "}
+              {lmIndex >= 0 ? lmArray[lmIndex].flashcards.length : 0}
             </span>
             {/* <span id="fcCounter">{fcIndex + 1 / lmArray[lmIndex].flashcards.length}</span> */}
             <button id="nextCardBtn" onClick={handleNext}>
