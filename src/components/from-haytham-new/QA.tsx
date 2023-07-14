@@ -7,8 +7,6 @@ const QA: React.FC<{ obj: flashCard; clicked: boolean }> = ({ obj, clicked }) =>
   const question: string = obj.content.question;
 
   const answer: string = obj.content.answer;
-  console.log("answer", answer);
-
   // For the font-size
   // let backQuestionStyle: string, answerStyle: string;
 
