@@ -16,7 +16,7 @@ const FcPane = ({ lmArray, lmIndex, updateArr, loaded }: Props) => {
   const [fcIndex, setFcIndex] = useState(-1);
 
   useEffect(() => {
-    if (lmIndex >= 0 && lmArray[lmIndex].flashcards.length > 0) {
+    if (lmIndex >= 0 && lmArray[lmIndex].flashcards.length > 0 && fcIndex === -1) {
       setFcIndex(0);
     }
   }, [lmArray, lmIndex]);

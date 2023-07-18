@@ -101,7 +101,12 @@ const LmPane = ({ lmArray, updateArr, handleIndex, index, getLmPosition, url }: 
       if (lmArray.length === 1) {
         handleIndex(-1);
       } else {
-        handleIndex(0);
+        // if index is 0, keep it at 0.
+        if (index === 0) {
+          handleIndex(0);
+        } else {
+          handleIndex(index - 1);
+        }
       }
 
       updateArr(newLmArray);
@@ -129,6 +134,7 @@ const LmPane = ({ lmArray, updateArr, handleIndex, index, getLmPosition, url }: 
       makePutReq("/lms", payload);
 
       updateArr(newLmArray);
+      handleIndex(getLmPosition(newLmArray, payload));
     } else if (mode === "add") {
       const newLm: VideoLm = {
         _id: "",
