@@ -7,9 +7,11 @@ interface Props {
   qBuffer: string;
   mcqAnsBuffer: string;
   qaAnsBuffer: string;
+  sourceBuffer: string;
   setQBuffer: Dispatch<React.SetStateAction<string>>;
   setMcqAnsBuffer: Dispatch<React.SetStateAction<string>>;
   setQaAnsBuffer: Dispatch<React.SetStateAction<string>>;
+  setSourceBuffer: Dispatch<React.SetStateAction<string>>;
 }
 
 const CardAdd = ({
@@ -18,9 +20,11 @@ const CardAdd = ({
   qBuffer,
   mcqAnsBuffer,
   qaAnsBuffer,
+  sourceBuffer,
   setQBuffer,
   setMcqAnsBuffer,
   setQaAnsBuffer,
+  setSourceBuffer,
 }: Props) => {
   // initially, buffers will update once mcqAnswers and qaAnswers are loaded.
   useEffect(() => {
@@ -29,7 +33,8 @@ const CardAdd = ({
       '[\n  {\n    "option": "<your answer here>",\n    "isCorrect": <your boolean here>\n  },\n  {\n    "option": "<your answer here>",\n    "isCorrect": <your boolean here>\n  }\n]'
     );
     setQaAnsBuffer("<Your answer here>");
-  }, [setQBuffer, setMcqAnsBuffer, setQaAnsBuffer]);
+    setSourceBuffer("<Your source here>");
+  }, [setQBuffer, setMcqAnsBuffer, setQaAnsBuffer, setSourceBuffer]);
 
   return (
     <>
@@ -42,6 +47,7 @@ const CardAdd = ({
           {q2Add === "q" && (
             <textarea id="cardAInput" value={qaAnsBuffer} onChange={(e) => setQaAnsBuffer(e.target.value)} />
           )}
+          <textarea id="cardSourceInput" value={sourceBuffer} onChange={(e) => setSourceBuffer(e.target.value)} />
           <button className="submitBtn" type="submit">
             Submit
           </button>

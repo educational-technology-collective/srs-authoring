@@ -34,6 +34,11 @@ const CardDisplay = ({ card }: Props) => {
             <QaAnswerField ans={qaAnswer} />
           </div>
         )}
+        {card && (
+          <div id="sourceDisplay">
+            <p>Source: {card.source}</p>
+          </div>
+        )}
       </div>
     </>
   );

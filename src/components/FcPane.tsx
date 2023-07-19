@@ -47,6 +47,7 @@ const FcPane = ({ lmArray, lmIndex, updateArr, loaded }: Props) => {
   const [qBuffer, setQBuffer] = useState("");
   const [mcqAnsBuffer, setMcqAnsBuffer] = useState("");
   const [qaAnsBuffer, setQaAnsBuffer] = useState("");
+  const [sourceBuffer, setSourceBuffer] = useState("");
 
   const handleAddSelect = () => {
     setMode("addSelect");
@@ -105,6 +106,7 @@ const FcPane = ({ lmArray, lmIndex, updateArr, loaded }: Props) => {
     setQBuffer("");
     setMcqAnsBuffer("");
     setQaAnsBuffer("");
+    setSourceBuffer("");
     setMode("display");
   };
 
@@ -120,6 +122,7 @@ const FcPane = ({ lmArray, lmIndex, updateArr, loaded }: Props) => {
     } else if (lmArray[lmIndex].flashcards[fcIndex].type === "q") {
       newLmArray[lmIndex].flashcards[fcIndex].content.answer = qaAnsBuffer;
     }
+    newLmArray[lmIndex].flashcards[fcIndex].source = sourceBuffer;
 
     updateArr(newLmArray);
 
@@ -145,6 +148,7 @@ const FcPane = ({ lmArray, lmIndex, updateArr, loaded }: Props) => {
       type: q2Add,
       content: { question: qBuffer, answer: [] },
       visibility: "Development",
+      source: sourceBuffer,
     };
 
     const newQaFc: Flashcard = {
@@ -153,6 +157,7 @@ const FcPane = ({ lmArray, lmIndex, updateArr, loaded }: Props) => {
       type: q2Add,
       content: { question: qBuffer, answer: "" },
       visibility: "Development",
+      source: sourceBuffer,
     };
 
     if (q2Add === "m") {
@@ -204,7 +209,6 @@ const FcPane = ({ lmArray, lmIndex, updateArr, loaded }: Props) => {
               {lmIndex >= 0 && lmArray[lmIndex].flashcards.length > 0 ? fcIndex + 1 : 0} /{" "}
               {lmIndex >= 0 ? lmArray[lmIndex].flashcards.length : 0}
             </span>
-            {/* <span id="fcCounter">{fcIndex + 1 / lmArray[lmIndex].flashcards.length}</span> */}
             <button id="nextCardBtn" onClick={handleNext}>
               &gt;
             </button>
@@ -219,9 +223,11 @@ const FcPane = ({ lmArray, lmIndex, updateArr, loaded }: Props) => {
               qBuffer={qBuffer}
               mcqAnsBuffer={mcqAnsBuffer}
               qaAnsBuffer={qaAnsBuffer}
+              sourceBuffer={sourceBuffer}
               setQBuffer={setQBuffer}
               setMcqAnsBuffer={setMcqAnsBuffer}
               setQaAnsBuffer={setQaAnsBuffer}
+              setSourceBuffer={setSourceBuffer}
             />
           )}
           {lmIndex >= 0 && mode === "edit" && (
@@ -231,9 +237,11 @@ const FcPane = ({ lmArray, lmIndex, updateArr, loaded }: Props) => {
               qBuffer={qBuffer}
               mcqAnsBuffer={mcqAnsBuffer}
               qaAnsBuffer={qaAnsBuffer}
+              sourceBuffer={sourceBuffer}
               setQBuffer={setQBuffer}
               setMcqAnsBuffer={setMcqAnsBuffer}
               setQaAnsBuffer={setQaAnsBuffer}
+              setSourceBuffer={setSourceBuffer}
             />
           )}
         </div>
