@@ -23,3 +23,8 @@
     height: 70%;
     word-wrap: break-word;
 }
+
+#cardSourceInput {
+    resize: none;
+    word-wrap: break-word;
+}

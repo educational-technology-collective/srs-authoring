@@ -1,6 +1,7 @@
 /* Text Styling for Individual Choice */
 .choice-text {
-  font-size: 1.1em;
+  font-size: 1em;
+  line-height: 1.5em;
   font-weight: bold;
 }
 
@@ -8,6 +9,7 @@
 /* Styling for the button before any clicking */
 .choice-button {
   flex-grow: 1;
+  white-space: normal;
 }
 
 .initial-button {

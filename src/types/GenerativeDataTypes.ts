@@ -12,6 +12,7 @@ export interface Flashcard {
     answer: McqAnswer[] | string;
   };
   visibility: string;
+  source: string;
 }
 
 // export interface VideoLm {
