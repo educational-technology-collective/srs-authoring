@@ -41,7 +41,22 @@ const compareLm = (lm1: VideoLm, lm2: VideoLm) => {
 };
 
 function App() {
-  const { isAuthenticated, user } = useAuth0();
+  const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
+
+  if (isAuthenticated) {
+    try {
+      // get access token from Auth0 so that we can access protected API routes.
+      getAccessTokenSilently({
+        authorizationParams: {
+          audience: "https://auth0-jwt-authorizer",
+        },
+      }).then((accessToken) => {
+        chrome.storage.session.set({ accessToken: accessToken });
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   const lmArray: VideoLm[] = [];
   const [arr, setArr] = useState(lmArray);
