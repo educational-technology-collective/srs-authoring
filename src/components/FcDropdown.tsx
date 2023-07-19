@@ -39,7 +39,7 @@ const FcDropdown = ({ lmArray, updateArr, lmIndex, fcIndex }: Props) => {
               : ""
           }
         >
-          {fcIndex >= 0 && (
+          {fcIndex >= 0 && lmIndex >= 0 && lmArray[lmIndex].flashcards.length > 0 && (
             <>
               <DropdownItem value={"Development"} />;
               <DropdownItem value={"Review"} />;
