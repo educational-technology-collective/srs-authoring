@@ -1,0 +1,13 @@
+#lmNavbarContainer {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+#lmHeader {
+    font-weight: bold;
+}
+
+#lmNavbarSpacer {
+    flex-grow: 1;
+}

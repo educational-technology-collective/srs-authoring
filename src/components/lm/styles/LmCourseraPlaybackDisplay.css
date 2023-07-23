@@ -1,0 +1,25 @@
+#lmCPDisplayContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+#lmForm {
+    display: grid;
+    grid-template-columns: 25% 75%;
+}
+
+.lmFormLabel {
+    grid-column: 1 / 2;
+    text-align: right;
+}
+
+.lmFormInput {
+    grid-column: 2 / 3;
+    margin-left: 2px;
+}
+
+#lmFormConcepts {
+    resize: none;
+    /* height: 30%; */
+    word-wrap: break-word;
+}

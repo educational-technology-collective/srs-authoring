@@ -1,0 +1,18 @@
+#lmSelectorContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#prevLmBtn {
+    
+}
+
+#nextLmBtn {
+
+}
+
+#lmCounter {
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+}
