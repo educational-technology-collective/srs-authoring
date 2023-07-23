@@ -1,51 +1,19 @@
 import { useState, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import { LandingPage, LogoutButton, LmPane, FcPane } from "./components";
-import { VideoLm } from "./types";
 import { makeGetReqWithParam } from "./utils";
+import { Flashcard, Lm, LmFcs } from "./types";
+
+import { LandingPage, LogoutButton, PreviewPane } from "./components";
+import { LmPane } from "./components/lm";
+import { FcPane } from "./components/fc";
 import "./styles/App.css";
-
-// sorts LMs by their start time.
-const compareLm = (lm1: VideoLm, lm2: VideoLm) => {
-  // convert time string to time
-  const lm1TimeStrs = lm1.content.startTime.split(":");
-
-  let lm1StartTime = 0;
-  if (lm1TimeStrs.length === 1) {
-    // SS
-    lm1StartTime = +lm1TimeStrs[0];
-  } else if (lm1TimeStrs.length === 2) {
-    // MM:SS
-    lm1StartTime = +lm1TimeStrs[0] * 60 + +lm1TimeStrs[1];
-  } else {
-    // HH:MM:SS
-    lm1StartTime = +lm1TimeStrs[0] * 60 * 60 + +lm1TimeStrs[1] * 60 + +lm1TimeStrs[2];
-  }
-
-  // convert time string to time
-  const lm2TimeStrs = lm2.content.startTime.split(":");
-
-  let lm2StartTime = 0;
-  if (lm2TimeStrs.length === 1) {
-    // SS
-    lm2StartTime = +lm2TimeStrs[0];
-  } else if (lm2TimeStrs.length === 2) {
-    // MM:SS
-    lm2StartTime = +lm2TimeStrs[0] * 60 + +lm2TimeStrs[1];
-  } else {
-    // HH:MM:SS
-    lm2StartTime = +lm2TimeStrs[0] * 60 * 60 + +lm2TimeStrs[1] * 60 + +lm2TimeStrs[2];
-  }
-
-  return lm1StartTime - lm2StartTime;
-};
 
 function App() {
   const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
 
   if (isAuthenticated) {
     try {
-      // get access token from Auth0 so that we can access protected API routes.
+      // Get access token from Auth0 so that we can access protected API routes.
       getAccessTokenSilently({
         authorizationParams: {
           audience: "https://auth0-jwt-authorizer",
@@ -58,20 +26,14 @@ function App() {
     }
   }
 
-  const lmArray: VideoLm[] = [];
-  const [arr, setArr] = useState(lmArray);
+  // State definitions hold LM and FC data for the current Coursera video.
+  const [lmArray, setLmArray] = useState([] as Lm[]);
+  const [lmIndex, setLmIndex] = useState(0);
+  const [fcArray, setFcArray] = useState([] as Flashcard[]);
+  const [fcIndex, setFcIndex] = useState(0);
+  const [lmFcs, setLmFcs] = useState({} as LmFcs);
 
-  const updateArr = (value: VideoLm[]) => {
-    // order of LMs is not guaranteed to be sorted, so we sort it.
-    value.sort(compareLm);
-    setArr(value);
-  };
-
-  const getLmPosition = (vlmArr: VideoLm[], value: VideoLm) => {
-    return vlmArr.indexOf(value);
-  };
-
-  // listens to subsequent URL change info sent by the service worker.
+  // Listens to subsequent URL change info sent by the service worker.
   const [url, setUrl] = useState("");
   const listener = (request: any) => {
     setUrl(request.message);
@@ -80,8 +42,9 @@ function App() {
 
   chrome.runtime.onMessage.addListener(listener);
 
+  // On URL change, get new LMs and associated FCs.
   useEffect(() => {
-    // grab URL when the extension first loads.
+    // Grab URL when the extension first loads.
     chrome.tabs
       .query({ active: true, lastFocusedWindow: true })
       .then(([tab]) => {
@@ -91,36 +54,51 @@ function App() {
         console.log("Error while initially fetching URL", err);
       });
 
-    const videoUrlRegex = /^https:\/\/www.coursera.org\/learn\/.*\/lecture\/.*$/;
+    const videoUrlRegex =
+      /^https:\/\/www.coursera.org\/learn\/.*\/lecture\/.*$/;
 
-    // check if url is valid video.
+    // Check if url is valid video.
     if (url && videoUrlRegex.test(url)) {
-      makeGetReqWithParam("/lms/search", [["videoUrl", url]])
-        .then((res) => {
-          updateArr(res);
-          if (res.length >= 1) {
-            setIndex(0);
+      (async () => {
+        const lms: Lm[] = await makeGetReqWithParam("/lms/search", [
+          ["videoUrl", url],
+        ]);
+
+        setLmArray(lms);
+        for (let i = 0; i < lms.length; ++i) {
+          const fcs = await makeGetReqWithParam("/flashcards/search", [
+            ["lmId", lms[i]._id],
+          ]);
+
+          if (fcs) {
+            lmFcs[lms[i]._id] = fcs;
           } else {
-            setIndex(-1);
+            lmFcs[lms[i]._id] = [];
           }
-        })
-        .catch((err) => {
-          console.log("Error while fetching videoLM:", err);
-        });
+
+          setLmFcs(lmFcs);
+          setFcArray(lmFcs[lms[lmIndex]._id]);
+        }
+      })();
     }
   }, [url]);
 
-  const [loaded, setLoaded] = useState(false);
+  // On updates to lmArray, lmIndex, lmFcs, or url, update fcArray.
   useEffect(() => {
-    document.getElementById("rightPreview") ? setLoaded(true) : setLoaded(false);
-  }, [document.getElementById("rightPreview")]);
+    // Sync current LM and corresponding FCs.
+    if (lmArray.length > 0) {
+      setFcArray(lmFcs[lmArray[lmIndex]._id]);
+    } else {
+      setFcArray([]);
+    }
 
-  // lmArray index handling.
-  // this index is used to access specific elements of the lmArray.
-  const [index, setIndex] = useState(-1);
-  const handleIndex = (value: number) => {
-    setIndex(value);
-  };
+    console.log("fcArray:", fcArray);
+  }, [lmArray, lmIndex, lmFcs, url]);
+
+  // const [loaded, setLoaded] = useState(false);
+  // useEffect(() => {
+  //   document.getElementById("rightPreview") ? setLoaded(true) : setLoaded(false);
+  // }, [document.getElementById("rightPreview")]);
 
   return (
     <>
@@ -133,16 +111,25 @@ function App() {
           <div id="leftEditor">
             <div id="lmPane">
               <LmPane
-                lmArray={arr}
-                updateArr={updateArr}
-                handleIndex={handleIndex}
-                index={index}
-                getLmPosition={getLmPosition}
+                lmArray={lmArray}
+                setLmArray={setLmArray}
+                lmIndex={lmIndex}
+                setLmIndex={setLmIndex}
+                lmFcs={lmFcs}
+                setLmFcs={setLmFcs}
                 url={url}
               />
             </div>
             <div id="fcPane">
-              <FcPane lmArray={arr} lmIndex={index} updateArr={updateArr} loaded={loaded} />
+              <FcPane
+                fcArray={fcArray}
+                setFcArray={setFcArray}
+                fcIndex={fcIndex}
+                setFcIndex={setFcIndex}
+                lmFcs={lmFcs}
+                setLmFcs={setLmFcs}
+                lmId={lmArray.length > 0 ? lmArray[lmIndex]._id : ""}
+              />
             </div>
             <div id="authPane">
               <p>Welcone, {user?.name}.</p>
@@ -150,7 +137,11 @@ function App() {
               <LogoutButton />
             </div>
           </div>
-          <div id="rightPreview"></div>
+          <div id="rightPreview">
+            {fcArray && fcArray.length > 0 && (
+              <PreviewPane flashcard={fcArray[fcIndex]} flashcards={fcArray} />
+            )}
+          </div>
         </>
       )}
     </>
