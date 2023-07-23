@@ -1,6 +1,6 @@
 import { flashCard } from "./from-haytham-new/types";
 import Card from "./from-haytham-new/Card";
-import "../styles/PreviewPane.css";
+import "./styles/PreviewPane.css";
 import { Flashcard } from "../types";
 
 interface Props {
@@ -26,7 +26,13 @@ const PreviewPane = ({ flashcard, flashcards }: Props) => {
 
   // console.log("previewing:", flashcard2);
 
-  return <>{flashcard && flashcard2 && <Card obj={flashcard2} isEmpty={flashcards.length > 0 ? false : true} />}</>;
+  return (
+    <>
+      {flashcard && flashcard2 && (
+        <Card obj={flashcard2} isEmpty={flashcards.length > 0 ? false : true} />
+      )}
+    </>
+  );
 };
 
 export { PreviewPane };
