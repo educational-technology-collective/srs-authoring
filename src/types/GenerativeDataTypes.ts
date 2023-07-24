@@ -5,7 +5,7 @@ export interface McqAnswer {
 
 export interface Flashcard {
   _id: string;
-  lmId: string;
+  lm_id: string;
   type: string;
   content: {
     question: string;

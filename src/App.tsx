@@ -67,7 +67,7 @@ function App() {
         setLmArray(lms);
         for (let i = 0; i < lms.length; ++i) {
           const fcs = await makeGetReqWithParam("/flashcards/search", [
-            ["lmId", lms[i]._id],
+            ["lm_id", lms[i]._id],
           ]);
 
           if (fcs) {
@@ -128,7 +128,7 @@ function App() {
                 setFcIndex={setFcIndex}
                 lmFcs={lmFcs}
                 setLmFcs={setLmFcs}
-                lmId={lmArray.length > 0 ? lmArray[lmIndex]._id : ""}
+                lm_id={lmArray.length > 0 ? lmArray[lmIndex]._id : ""}
               />
             </div>
             <div id="authPane">
