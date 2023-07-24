@@ -1,0 +1,13 @@
+#fcNavbarContainer {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+#fcHeader {
+    font-weight: bold;
+}
+
+#fcNavbarSpacer {
+    flex-grow: 1;
+}

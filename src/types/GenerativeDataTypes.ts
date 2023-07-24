@@ -27,9 +27,19 @@ export interface Flashcard {
 
 export interface Lm {
   _id: string;
-  type: string;
+  platform: string;
+  contentType: string;
   content: object;
   visibility: string;
+}
+
+export interface CourseraPlaybackLm extends Lm {
+  content: {
+    videoUrl: string;
+    startTime: string;
+    endTime: string;
+    concepts: string[];
+  };
 }
 
 export interface VideoLm {
@@ -41,6 +51,10 @@ export interface VideoLm {
     endTime: string;
     concepts: string[];
   };
-  flashcards: Flashcard[];
   visibility: string;
+  flashcards: Flashcard[];
+}
+
+export interface LmFcs {
+  [key: string]: Flashcard[];
 }
