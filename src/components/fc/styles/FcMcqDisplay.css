@@ -1,0 +1,31 @@
+#fcMcqDisplayContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+#fcForm {
+    display: grid;
+    grid-template-columns: 10% 90%;
+}
+
+.fcFormLabel {
+    grid-column: 1 / 2;
+    text-align: right;
+}
+
+.fcFormInput {
+    grid-column: 2 / 3;
+    margin-left: 2px;
+}
+
+#fcFormQuestions {
+    resize: none;
+    /* height: 30%; */
+    word-wrap: break-word;
+}
+
+#fcFormAnswers {
+    resize: none;
+    /* height: 50%; */
+    word-wrap: break-word;
+}

@@ -1,5 +1,5 @@
 import { LoginButton } from ".";
-import "../styles/LandingPage.css";
+import "./styles/LandingPage.css";
 
 const LandingPage = () => {
   return (
