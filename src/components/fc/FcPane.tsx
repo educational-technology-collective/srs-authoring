@@ -10,7 +10,7 @@ interface Props {
   setFcIndex: React.Dispatch<React.SetStateAction<number>>;
   lmFcs: LmFcs;
   setLmFcs: React.Dispatch<React.SetStateAction<LmFcs>>;
-  lmId: string;
+  lm_id: string;
 }
 
 const FcPane = ({
@@ -20,7 +20,7 @@ const FcPane = ({
   setFcIndex,
   lmFcs,
   setLmFcs,
-  lmId,
+  lm_id,
 }: Props) => {
   return (
     <div id="fcPaneContainer">
@@ -51,14 +51,14 @@ const FcPane = ({
           setLmFcs={setLmFcs}
         />
       )}
-      {fcArray && lmFcs[lmId] != null && (
+      {fcArray && lmFcs[lm_id] != null && (
         <FcCreator
           fcArray={fcArray}
           setFcArray={setFcArray}
           setFcIndex={setFcIndex}
           lmFcs={lmFcs}
           setLmFcs={setLmFcs}
-          lmId={lmId}
+          lm_id={lm_id}
         />
       )}
     </div>

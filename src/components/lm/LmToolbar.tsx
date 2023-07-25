@@ -75,7 +75,7 @@ const LmToolbar = ({
       delete lmFcs[lmArray[lmIndex]._id];
 
       if (lmArray.length === 1) {
-        setLmIndex(-1);
+        setLmIndex(0);
       } else {
         // If index is 0, keep it at 0.
         if (lmIndex === 0) {

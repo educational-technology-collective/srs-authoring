@@ -19,7 +19,7 @@ const PreviewPane = ({ flashcard, flashcards }: Props) => {
 
   if (flashcard && flashcards.length > 0) {
     flashcard2._id = flashcard._id;
-    flashcard2.lmid = flashcard.lmId;
+    flashcard2.lmid = flashcard.lm_id;
     flashcard2.type = flashcard.type;
     flashcard2.content = flashcard.content;
   }

@@ -10,7 +10,7 @@ interface Props {
   setFcIndex: React.Dispatch<React.SetStateAction<number>>;
   lmFcs: LmFcs;
   setLmFcs: React.Dispatch<React.SetStateAction<LmFcs>>;
-  lmId: string;
+  lm_id: string;
 }
 
 const FcCreator = ({
@@ -19,7 +19,7 @@ const FcCreator = ({
   setFcIndex,
   lmFcs,
   setLmFcs,
-  lmId,
+  lm_id,
 }: Props) => {
   // Buffer holds data until create button is clicked.
   const [typeBuffer, setTypeBuffer] = useState("m");
@@ -27,7 +27,7 @@ const FcCreator = ({
   const handleSubmit = () => {
     const newFc: Flashcard = {
       _id: "",
-      lmId: lmId,
+      lm_id: lm_id,
       type: typeBuffer,
       content: {
         question: "",
@@ -56,7 +56,7 @@ const FcCreator = ({
     newFcArray.push(newFc);
     setFcArray(newFcArray);
     setFcIndex(getFcPosition(newFcArray, newFc));
-    lmFcs[lmId].push(newFc);
+    lmFcs[lm_id].push(newFc);
     setLmFcs(lmFcs);
   };
 

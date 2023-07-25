@@ -45,7 +45,7 @@ const FcToolbar = ({
     // Push changes locally.
     setFcArray(newFcArray);
     setFcIndex(getFcPosition(newFcArray, payload));
-    lmFcs[payload.lmId][fcIndex] = payload;
+    lmFcs[payload.lm_id][fcIndex] = payload;
     setLmFcs(lmFcs);
   };
 
@@ -57,10 +57,10 @@ const FcToolbar = ({
       makeDeleteReq(`/flashcards/id/${fcArray[fcIndex]._id}`);
 
       newFcArray.splice(fcIndex, 1);
-      lmFcs[fcArray[fcIndex].lmId].splice(fcIndex, 1);
+      lmFcs[fcArray[fcIndex].lm_id].splice(fcIndex, 1);
 
       if (fcArray.length === 1) {
-        setFcIndex(-1);
+        setFcIndex(0);
       } else {
         // If index is 0, keep it at 0.
         if (fcIndex === 0) {
