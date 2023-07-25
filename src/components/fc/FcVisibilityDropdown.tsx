@@ -24,7 +24,7 @@ const FcVisibilityDropdown = ({
       const newFcArray: Flashcard[] = JSON.parse(JSON.stringify(fcArray));
       newFcArray[fcIndex].visibility = e.value;
       setFcArray(newFcArray);
-      lmFcs[fcArray[fcIndex].lmId][fcIndex].visibility = e.value;
+      lmFcs[fcArray[fcIndex].lm_id][fcIndex].visibility = e.value;
       setLmFcs(lmFcs);
 
       // Push changes to server.
