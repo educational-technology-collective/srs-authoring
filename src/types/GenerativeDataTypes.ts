@@ -21,6 +21,7 @@ export interface Lm {
   contentType: string;
   content: object;
   visibility: string;
+  flashcards: Flashcard[];
 }
 
 export interface CourseraPlaybackLm extends Lm {
