@@ -1,5 +1,5 @@
 import { FormEvent } from "react";
-import { CourseraPlaybackLm, Lm, LmFcs } from "../../types";
+import { CourseraPlaybackLm, Lm } from "../../types";
 import {
   compareCourseraPlaybackLm,
   getCourseraPlaybackLmPosition,
@@ -14,8 +14,6 @@ interface Props {
   setLmArray: React.Dispatch<React.SetStateAction<Lm[]>>;
   lmIndex: number;
   setLmIndex: React.Dispatch<React.SetStateAction<number>>;
-  lmFcs: LmFcs;
-  setLmFcs: React.Dispatch<React.SetStateAction<LmFcs>>;
   startTimeBuffer: string;
   endTimeBuffer: string;
   conceptsBuffer: string;
@@ -26,8 +24,6 @@ const LmToolbar = ({
   setLmArray,
   lmIndex,
   setLmIndex,
-  lmFcs,
-  setLmFcs,
   startTimeBuffer,
   endTimeBuffer,
   conceptsBuffer,
@@ -69,7 +65,6 @@ const LmToolbar = ({
       makeDeleteReq(`/lms/id/${lmArray[lmIndex]._id}`);
 
       newLmArray.splice(lmIndex, 1);
-      delete lmFcs[lmArray[lmIndex]._id];
 
       if (lmArray.length === 1) {
         setLmIndex(0);
@@ -83,7 +78,6 @@ const LmToolbar = ({
       }
 
       setLmArray(newLmArray);
-      setLmFcs(lmFcs);
     }
   };
 

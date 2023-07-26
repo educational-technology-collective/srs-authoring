@@ -1,31 +1,22 @@
-import { Flashcard, LmFcs } from "../../types";
+import { Flashcard, Lm } from "../../types";
 
 import { FcDropdownItem } from ".";
 import { makePutReq } from "../../utils";
 
 interface Props {
-  fcArray: Flashcard[];
-  // setFcArray: React.Dispatch<React.SetStateAction<Flashcard[]>>;
+  lmArray: Lm[];
+  lmIndex: number;
   fcIndex: number;
-  lmFcs: LmFcs;
-  setLmFcs: React.Dispatch<React.SetStateAction<LmFcs>>;
 }
 
-const FcVisibilityDropdown = ({
-  fcArray,
-  // setFcArray,
-  fcIndex,
-  lmFcs,
-  setLmFcs,
-}: Props) => {
+const FcVisibilityDropdown = ({ lmArray, lmIndex, fcIndex }: Props) => {
   const handleChange = () => {
-    if (fcArray.length > 0) {
+    if (lmArray[lmIndex].flashcards.length > 0) {
       const e = document.getElementById("fcSelectMenu") as HTMLSelectElement;
-      const newFcArray: Flashcard[] = JSON.parse(JSON.stringify(fcArray));
+      const newFcArray: Flashcard[] = JSON.parse(
+        JSON.stringify(lmArray[lmIndex].flashcards)
+      );
       newFcArray[fcIndex].visibility = e.value;
-      // setFcArray(newFcArray);
-      lmFcs[fcArray[fcIndex].lm_id][fcIndex].visibility = e.value;
-      setLmFcs(lmFcs);
 
       // Push changes to server.
       const payload = newFcArray[fcIndex];
@@ -40,9 +31,13 @@ const FcVisibilityDropdown = ({
         name=""
         id="fcSelectMenu"
         onChange={handleChange}
-        value={fcArray.length > 0 ? fcArray[fcIndex].visibility : ""}
+        value={
+          lmArray[lmIndex].flashcards.length > 0
+            ? lmArray[lmIndex].flashcards[fcIndex].visibility
+            : ""
+        }
       >
-        {fcArray.length > 0 && (
+        {lmArray[lmIndex].flashcards.length > 0 && (
           <>
             <FcDropdownItem value={"development"} />;
             <FcDropdownItem value={"review"} />;

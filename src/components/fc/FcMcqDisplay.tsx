@@ -1,44 +1,46 @@
 import { useEffect, useState } from "react";
-import { Flashcard, LmFcs, McqAnswer } from "../../types";
+import { Lm, McqAnswer } from "../../types";
 
 import { FcToolbar } from ".";
 import "./styles/FcMcqDisplay.css";
 
 interface Props {
-  fcArray: Flashcard[];
-  // setFcArray: React.Dispatch<React.SetStateAction<Flashcard[]>>;
+  lmArray: Lm[];
+  setLmArray: React.Dispatch<React.SetStateAction<Lm[]>>;
+  lmIndex: number;
   fcIndex: number;
   setFcIndex: React.Dispatch<React.SetStateAction<number>>;
-  lmFcs: LmFcs;
-  setLmFcs: React.Dispatch<React.SetStateAction<LmFcs>>;
 }
 
 const FcMcqDisplay = ({
-  fcArray,
-  // setFcArray,
+  lmArray,
+  setLmArray,
+  lmIndex,
   fcIndex,
   setFcIndex,
-  lmFcs,
-  setLmFcs,
 }: Props) => {
   // Buffer states to hold temporary data.
-  const [qBuffer, setQBuffer] = useState(fcArray[fcIndex].content.question);
+  const [qBuffer, setQBuffer] = useState(
+    lmArray[lmIndex].flashcards[fcIndex].content.question
+  );
   const [aBuffer, setABuffer] = useState(
-    JSON.stringify(fcArray[fcIndex].content.answer as McqAnswer[])
+    JSON.stringify(
+      lmArray[lmIndex].flashcards[fcIndex].content.answer as McqAnswer[]
+    )
   );
 
   useEffect(() => {
-    if (fcArray.length > 0) {
-      setQBuffer(fcArray[fcIndex].content.question);
+    if (lmArray[lmIndex].flashcards.length > 0) {
+      setQBuffer(lmArray[lmIndex].flashcards[fcIndex].content.question);
       setABuffer(
         JSON.stringify(
-          fcArray[fcIndex].content.answer as McqAnswer[],
+          lmArray[lmIndex].flashcards[fcIndex].content.answer as McqAnswer[],
           undefined,
           2
         )
       );
     }
-  }, [fcArray, fcIndex]);
+  }, [lmArray[lmIndex].flashcards, fcIndex]);
 
   return (
     <div id="fcMcqDisplayContainer">
@@ -67,12 +69,11 @@ const FcMcqDisplay = ({
         />
       </form>
       <FcToolbar
-        fcArray={fcArray}
-        // setFcArray={setFcArray}
+        lmArray={lmArray}
+        setLmArray={setLmArray}
+        lmIndex={lmIndex}
         fcIndex={fcIndex}
         setFcIndex={setFcIndex}
-        lmFcs={lmFcs}
-        setLmFcs={setLmFcs}
         qBuffer={qBuffer}
         aBuffer={aBuffer}
       />

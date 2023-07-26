@@ -1,17 +1,15 @@
+import { useEffect, useState } from "react";
+import { CourseraPlaybackLm, Lm } from "../../types";
+import { convertConceptsArrayToString } from "../../utils";
+
 import { LmToolbar } from ".";
 import "./styles/LmCourseraPlaybackDisplay.css";
-
-import { useEffect, useState } from "react";
-import { CourseraPlaybackLm, Lm, LmFcs } from "../../types";
-import { convertConceptsArrayToString } from "../../utils";
 
 interface Props {
   lmArray: Lm[];
   setLmArray: React.Dispatch<React.SetStateAction<Lm[]>>;
   lmIndex: number;
   setLmIndex: React.Dispatch<React.SetStateAction<number>>;
-  lmFcs: LmFcs;
-  setLmFcs: React.Dispatch<React.SetStateAction<LmFcs>>;
 }
 
 const LmCourseraPlaybackDisplay = ({
@@ -19,8 +17,6 @@ const LmCourseraPlaybackDisplay = ({
   setLmArray,
   lmIndex,
   setLmIndex,
-  lmFcs,
-  setLmFcs,
 }: Props) => {
   // Cast the general LM to a coursera-playback LM.
   const cpLm: CourseraPlaybackLm = lmArray[lmIndex] as CourseraPlaybackLm;
@@ -95,8 +91,6 @@ const LmCourseraPlaybackDisplay = ({
         setLmArray={setLmArray}
         lmIndex={lmIndex}
         setLmIndex={setLmIndex}
-        lmFcs={lmFcs}
-        setLmFcs={setLmFcs}
         startTimeBuffer={startTimeBuffer}
         endTimeBuffer={endTimeBuffer}
         conceptsBuffer={conceptsBuffer}

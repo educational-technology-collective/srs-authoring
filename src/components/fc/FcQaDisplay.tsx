@@ -1,38 +1,38 @@
 import { useEffect, useState } from "react";
-import { Flashcard, LmFcs } from "../../types";
+import { Lm } from "../../types";
 
 import { FcToolbar } from ".";
 import "./styles/FcQaDisplay.css";
 
 interface Props {
-  fcArray: Flashcard[];
-  // setFcArray: React.Dispatch<React.SetStateAction<Flashcard[]>>;
+  lmArray: Lm[];
+  setLmArray: React.Dispatch<React.SetStateAction<Lm[]>>;
+  lmIndex: number;
   fcIndex: number;
   setFcIndex: React.Dispatch<React.SetStateAction<number>>;
-  lmFcs: LmFcs;
-  setLmFcs: React.Dispatch<React.SetStateAction<LmFcs>>;
 }
 
 const FcQaDisplay = ({
-  fcArray,
-  // setFcArray,
+  lmArray,
+  setLmArray,
+  lmIndex,
   fcIndex,
   setFcIndex,
-  lmFcs,
-  setLmFcs,
 }: Props) => {
   // Buffer states to hold temporary data.
-  const [qBuffer, setQBuffer] = useState(fcArray[fcIndex].content.question);
+  const [qBuffer, setQBuffer] = useState(
+    lmArray[lmIndex].flashcards[fcIndex].content.question
+  );
   const [aBuffer, setABuffer] = useState(
-    fcArray[fcIndex].content.answer as string
+    lmArray[lmIndex].flashcards[fcIndex].content.answer as string
   );
 
   useEffect(() => {
-    if (fcArray.length > 0) {
-      setQBuffer(fcArray[fcIndex].content.question);
-      setABuffer(fcArray[fcIndex].content.answer as string);
+    if (lmArray[lmIndex].flashcards.length > 0) {
+      setQBuffer(lmArray[lmIndex].flashcards[fcIndex].content.question);
+      setABuffer(lmArray[lmIndex].flashcards[fcIndex].content.answer as string);
     }
-  }, [fcArray, fcIndex]);
+  }, [lmArray[lmIndex].flashcards, fcIndex]);
 
   return (
     <div id="fcQaDisplayContainer">
@@ -61,12 +61,11 @@ const FcQaDisplay = ({
         />
       </form>
       <FcToolbar
-        fcArray={fcArray}
-        // setFcArray={setFcArray}
+        lmArray={lmArray}
+        setLmArray={setLmArray}
+        lmIndex={lmIndex}
         fcIndex={fcIndex}
         setFcIndex={setFcIndex}
-        lmFcs={lmFcs}
-        setLmFcs={setLmFcs}
         qBuffer={qBuffer}
         aBuffer={aBuffer}
       />
