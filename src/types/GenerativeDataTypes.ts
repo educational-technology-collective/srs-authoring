@@ -15,16 +15,6 @@ export interface Flashcard {
   source: string;
 }
 
-// export interface VideoLm {
-//   _id: string;
-//   videoUrl: string;
-//   startTime: string;
-//   endTime: string;
-//   concepts: string[]; // for frontend use
-//   flashcards: Flashcard[]; // for frontend use
-//   visibility: string;
-// }
-
 export interface Lm {
   _id: string;
   platform: string;
@@ -35,24 +25,13 @@ export interface Lm {
 
 export interface CourseraPlaybackLm extends Lm {
   content: {
+    courseTitle: string;
+    videoTitle: string;
     videoUrl: string;
     startTime: string;
     endTime: string;
     concepts: string[];
   };
-}
-
-export interface VideoLm {
-  _id: string;
-  type: string;
-  content: {
-    videoUrl: string;
-    startTime: string;
-    endTime: string;
-    concepts: string[];
-  };
-  visibility: string;
-  flashcards: Flashcard[];
 }
 
 export interface LmFcs {
