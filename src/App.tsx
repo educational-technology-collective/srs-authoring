@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { makeGetReqWithParam } from "./utils";
-import { Flashcard, Lm, LmFcs } from "./types";
+import { Lm, LmFcs } from "./types";
 
 import { LandingPage, LogoutButton, PreviewPane } from "./components";
 import { LmPane } from "./components/lm";
@@ -29,7 +29,7 @@ function App() {
   // State definitions hold LM and FC data for the current Coursera video.
   const [lmArray, setLmArray] = useState([] as Lm[]);
   const [lmIndex, setLmIndex] = useState(0);
-  const [fcArray, setFcArray] = useState([] as Flashcard[]);
+  // const [fcArray, setFcArray] = useState([] as Flashcard[]);
   const [fcIndex, setFcIndex] = useState(0);
   const [lmFcs, setLmFcs] = useState({} as LmFcs);
 
@@ -77,23 +77,24 @@ function App() {
           }
 
           setLmFcs(lmFcs);
-          setFcArray(lmFcs[lms[lmIndex]._id]);
+          // setFcArray(lmFcs[lms[lmIndex]._id]);
         }
       })();
     }
   }, [url]);
 
   // On updates to lmArray, lmIndex, lmFcs, or url, update fcArray.
-  useEffect(() => {
-    // Sync current LM and corresponding FCs.
-    if (lmArray.length > 0) {
-      setFcArray(lmFcs[lmArray[lmIndex]._id]);
-    } else {
-      setFcArray([]);
-    }
+  // useEffect(() => {
+  //   // Sync current LM and corresponding FCs.
+  //   // if (lmArray.length > 0) {
+  //   //   setFcArray(lmFcs[lmArray[lmIndex]._id]);
+  //   // } else {
+  //   //   setFcArray([]);
+  //   // }
 
-    console.log("fcArray:", fcArray);
-  }, [lmArray, lmIndex, lmFcs, url]);
+  //   // Reset fcIndex to 0;
+  //   setFcIndex(0);
+  // }, [lmArray, lmIndex, lmFcs]);
 
   // const [loaded, setLoaded] = useState(false);
   // useEffect(() => {
@@ -117,13 +118,18 @@ function App() {
                 setLmIndex={setLmIndex}
                 lmFcs={lmFcs}
                 setLmFcs={setLmFcs}
+                setFcIndex={setFcIndex}
                 url={url}
               />
             </div>
             <div id="fcPane">
               <FcPane
-                fcArray={fcArray}
-                setFcArray={setFcArray}
+                fcArray={
+                  lmFcs[lmArray[lmIndex]._id] != null
+                    ? lmFcs[lmArray[lmIndex]._id]
+                    : []
+                }
+                // setFcArray={setFcArray}
                 fcIndex={fcIndex}
                 setFcIndex={setFcIndex}
                 lmFcs={lmFcs}
@@ -138,9 +144,14 @@ function App() {
             </div>
           </div>
           <div id="rightPreview">
-            {fcArray && fcArray.length > 0 && (
-              <PreviewPane flashcard={fcArray[fcIndex]} flashcards={fcArray} />
-            )}
+            {lmArray.length > 0 &&
+              lmFcs[lmArray[lmIndex]._id] != null &&
+              lmFcs[lmArray[lmIndex]._id].length > 0 && (
+                <PreviewPane
+                  flashcard={lmFcs[lmArray[lmIndex]._id][fcIndex]}
+                  flashcards={lmFcs[lmArray[lmIndex]._id]}
+                />
+              )}
           </div>
         </>
       )}

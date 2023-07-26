@@ -5,7 +5,7 @@ import { makePutReq } from "../../utils";
 
 interface Props {
   fcArray: Flashcard[];
-  setFcArray: React.Dispatch<React.SetStateAction<Flashcard[]>>;
+  // setFcArray: React.Dispatch<React.SetStateAction<Flashcard[]>>;
   fcIndex: number;
   lmFcs: LmFcs;
   setLmFcs: React.Dispatch<React.SetStateAction<LmFcs>>;
@@ -13,7 +13,7 @@ interface Props {
 
 const FcVisibilityDropdown = ({
   fcArray,
-  setFcArray,
+  // setFcArray,
   fcIndex,
   lmFcs,
   setLmFcs,
@@ -23,7 +23,7 @@ const FcVisibilityDropdown = ({
       const e = document.getElementById("fcSelectMenu") as HTMLSelectElement;
       const newFcArray: Flashcard[] = JSON.parse(JSON.stringify(fcArray));
       newFcArray[fcIndex].visibility = e.value;
-      setFcArray(newFcArray);
+      // setFcArray(newFcArray);
       lmFcs[fcArray[fcIndex].lm_id][fcIndex].visibility = e.value;
       setLmFcs(lmFcs);
 

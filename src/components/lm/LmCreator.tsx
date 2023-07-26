@@ -29,11 +29,16 @@ const LmCreator = ({
   const [typeBuffer, setTypeBuffer] = useState("playback");
 
   const handleSubmit = () => {
+    const courseTitle = url.split("/")[2];
+    const videoTitle = url.split("/")[-1];
+
     const newLm: CourseraPlaybackLm = {
       _id: "",
       platform: "coursera",
       contentType: typeBuffer,
       content: {
+        courseTitle: courseTitle,
+        videoTitle: videoTitle,
         videoUrl: url,
         startTime: "",
         endTime: "",

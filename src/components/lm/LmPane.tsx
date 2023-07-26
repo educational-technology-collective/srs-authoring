@@ -11,6 +11,7 @@ interface Props {
   setLmIndex: React.Dispatch<React.SetStateAction<number>>;
   lmFcs: LmFcs;
   setLmFcs: React.Dispatch<React.SetStateAction<LmFcs>>;
+  setFcIndex: React.Dispatch<React.SetStateAction<number>>;
   url: string;
 }
 
@@ -21,6 +22,7 @@ const LmPane = ({
   setLmIndex,
   lmFcs,
   setLmFcs,
+  setFcIndex,
   url,
 }: Props) => {
   return (
@@ -29,6 +31,7 @@ const LmPane = ({
         lmIndex={lmIndex}
         setLmIndex={setLmIndex}
         numLms={lmArray.length}
+        setFcIndex={setFcIndex}
       />
       {lmArray.length > 0 &&
         lmArray[lmIndex].platform === "coursera" &&

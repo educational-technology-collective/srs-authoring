@@ -5,7 +5,7 @@ import "./styles/FcPane.css";
 
 interface Props {
   fcArray: Flashcard[];
-  setFcArray: React.Dispatch<React.SetStateAction<Flashcard[]>>;
+  // setFcArray: React.Dispatch<React.SetStateAction<Flashcard[]>>;
   fcIndex: number;
   setFcIndex: React.Dispatch<React.SetStateAction<number>>;
   lmFcs: LmFcs;
@@ -15,7 +15,7 @@ interface Props {
 
 const FcPane = ({
   fcArray,
-  setFcArray,
+  // setFcArray,
   fcIndex,
   setFcIndex,
   lmFcs,
@@ -34,7 +34,7 @@ const FcPane = ({
       {fcArray && fcArray.length > 0 && fcArray[fcIndex].type === "m" && (
         <FcMcqDisplay
           fcArray={fcArray}
-          setFcArray={setFcArray}
+          // setFcArray={setFcArray}
           fcIndex={fcIndex}
           setFcIndex={setFcIndex}
           lmFcs={lmFcs}
@@ -44,7 +44,7 @@ const FcPane = ({
       {fcArray && fcArray.length > 0 && fcArray[fcIndex].type === "q" && (
         <FcQaDisplay
           fcArray={fcArray}
-          setFcArray={setFcArray}
+          // setFcArray={setFcArray}
           fcIndex={fcIndex}
           setFcIndex={setFcIndex}
           lmFcs={lmFcs}
@@ -54,7 +54,7 @@ const FcPane = ({
       {fcArray && lmFcs[lm_id] != null && (
         <FcCreator
           fcArray={fcArray}
-          setFcArray={setFcArray}
+          // setFcArray={setFcArray}
           setFcIndex={setFcIndex}
           lmFcs={lmFcs}
           setLmFcs={setLmFcs}

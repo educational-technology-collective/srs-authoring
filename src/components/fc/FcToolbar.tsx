@@ -6,7 +6,7 @@ import { FcVisibilityDropdown } from ".";
 
 interface Props {
   fcArray: Flashcard[];
-  setFcArray: React.Dispatch<React.SetStateAction<Flashcard[]>>;
+  // setFcArray: React.Dispatch<React.SetStateAction<Flashcard[]>>;
   fcIndex: number;
   setFcIndex: React.Dispatch<React.SetStateAction<number>>;
   lmFcs: LmFcs;
@@ -17,7 +17,7 @@ interface Props {
 
 const FcToolbar = ({
   fcArray,
-  setFcArray,
+  // setFcArray,
   fcIndex,
   setFcIndex,
   lmFcs,
@@ -43,7 +43,7 @@ const FcToolbar = ({
     makePutReq("/flashcards", payload);
 
     // Push changes locally.
-    setFcArray(newFcArray);
+    // setFcArray(newFcArray);
     setFcIndex(getFcPosition(newFcArray, payload));
     lmFcs[payload.lm_id][fcIndex] = payload;
     setLmFcs(lmFcs);
@@ -71,7 +71,7 @@ const FcToolbar = ({
       }
 
       // Push changes locally.
-      setFcArray(newFcArray);
+      // setFcArray(newFcArray);
       setLmFcs(lmFcs);
     }
   };
@@ -80,7 +80,7 @@ const FcToolbar = ({
     <div>
       <FcVisibilityDropdown
         fcArray={fcArray}
-        setFcArray={setFcArray}
+        // setFcArray={setFcArray}
         fcIndex={fcIndex}
         lmFcs={lmFcs}
         setLmFcs={setLmFcs}

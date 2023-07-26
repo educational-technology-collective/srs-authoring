@@ -16,7 +16,6 @@ interface Props {
   setLmIndex: React.Dispatch<React.SetStateAction<number>>;
   lmFcs: LmFcs;
   setLmFcs: React.Dispatch<React.SetStateAction<LmFcs>>;
-  videoUrlBuffer: string;
   startTimeBuffer: string;
   endTimeBuffer: string;
   conceptsBuffer: string;
@@ -29,12 +28,11 @@ const LmToolbar = ({
   setLmIndex,
   lmFcs,
   setLmFcs,
-  videoUrlBuffer,
   startTimeBuffer,
   endTimeBuffer,
   conceptsBuffer,
 }: Props) => {
-  console.log(videoUrlBuffer, startTimeBuffer, endTimeBuffer, conceptsBuffer);
+  console.log(startTimeBuffer, endTimeBuffer, conceptsBuffer);
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
@@ -42,7 +40,6 @@ const LmToolbar = ({
       JSON.stringify(lmArray)
     );
 
-    newLmArray[lmIndex].content.videoUrl = videoUrlBuffer;
     newLmArray[lmIndex].content.startTime = startTimeBuffer;
     newLmArray[lmIndex].content.endTime = endTimeBuffer;
     newLmArray[lmIndex].content.concepts = conceptsBuffer.split(", ");

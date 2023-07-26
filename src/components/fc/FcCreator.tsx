@@ -6,7 +6,7 @@ import { FcDropdownItem } from ".";
 
 interface Props {
   fcArray: Flashcard[];
-  setFcArray: React.Dispatch<React.SetStateAction<Flashcard[]>>;
+  // setFcArray: React.Dispatch<React.SetStateAction<Flashcard[]>>;
   setFcIndex: React.Dispatch<React.SetStateAction<number>>;
   lmFcs: LmFcs;
   setLmFcs: React.Dispatch<React.SetStateAction<LmFcs>>;
@@ -15,7 +15,7 @@ interface Props {
 
 const FcCreator = ({
   fcArray,
-  setFcArray,
+  // setFcArray,
   setFcIndex,
   lmFcs,
   setLmFcs,
@@ -54,7 +54,7 @@ const FcCreator = ({
 
     const newFcArray: Flashcard[] = JSON.parse(JSON.stringify(fcArray));
     newFcArray.push(newFc);
-    setFcArray(newFcArray);
+    // setFcArray(newFcArray);
     setFcIndex(getFcPosition(newFcArray, newFc));
     lmFcs[lm_id].push(newFc);
     setLmFcs(lmFcs);

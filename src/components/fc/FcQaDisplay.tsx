@@ -6,7 +6,7 @@ import "./styles/FcQaDisplay.css";
 
 interface Props {
   fcArray: Flashcard[];
-  setFcArray: React.Dispatch<React.SetStateAction<Flashcard[]>>;
+  // setFcArray: React.Dispatch<React.SetStateAction<Flashcard[]>>;
   fcIndex: number;
   setFcIndex: React.Dispatch<React.SetStateAction<number>>;
   lmFcs: LmFcs;
@@ -15,7 +15,7 @@ interface Props {
 
 const FcQaDisplay = ({
   fcArray,
-  setFcArray,
+  // setFcArray,
   fcIndex,
   setFcIndex,
   lmFcs,
@@ -62,7 +62,7 @@ const FcQaDisplay = ({
       </form>
       <FcToolbar
         fcArray={fcArray}
-        setFcArray={setFcArray}
+        // setFcArray={setFcArray}
         fcIndex={fcIndex}
         setFcIndex={setFcIndex}
         lmFcs={lmFcs}
