@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { makeGetReqWithParam } from "./utils";
-import { Lm, LmFcs } from "./types";
+import { Lm } from "./types";
 
 import { LandingPage, LogoutButton, PreviewPane } from "./components";
 import { LmPane } from "./components/lm";
@@ -29,9 +29,7 @@ function App() {
   // State definitions hold LM and FC data for the current Coursera video.
   const [lmArray, setLmArray] = useState([] as Lm[]);
   const [lmIndex, setLmIndex] = useState(0);
-  // const [fcArray, setFcArray] = useState([] as Flashcard[]);
   const [fcIndex, setFcIndex] = useState(0);
-  const [lmFcs, setLmFcs] = useState({} as LmFcs);
 
   // Listens to subsequent URL change info sent by the service worker.
   const [url, setUrl] = useState("");
@@ -44,6 +42,9 @@ function App() {
 
   // On URL change, get new LMs and associated FCs.
   useEffect(() => {
+    setLmArray([]);
+    setLmIndex(0);
+    setFcIndex(0);
     // Grab URL when the extension first loads.
     chrome.tabs
       .query({ active: true, lastFocusedWindow: true })
@@ -64,42 +65,18 @@ function App() {
           ["videoUrl", url],
         ]);
 
-        setLmArray(lms);
         for (let i = 0; i < lms.length; ++i) {
           const fcs = await makeGetReqWithParam("/flashcards/search", [
             ["lm_id", lms[i]._id],
           ]);
 
-          if (fcs) {
-            lmFcs[lms[i]._id] = fcs;
-          } else {
-            lmFcs[lms[i]._id] = [];
-          }
-
-          setLmFcs(lmFcs);
-          // setFcArray(lmFcs[lms[lmIndex]._id]);
+          lms[i].flashcards = fcs;
         }
+
+        setLmArray(lms);
       })();
     }
   }, [url]);
-
-  // On updates to lmArray, lmIndex, lmFcs, or url, update fcArray.
-  // useEffect(() => {
-  //   // Sync current LM and corresponding FCs.
-  //   // if (lmArray.length > 0) {
-  //   //   setFcArray(lmFcs[lmArray[lmIndex]._id]);
-  //   // } else {
-  //   //   setFcArray([]);
-  //   // }
-
-  //   // Reset fcIndex to 0;
-  //   setFcIndex(0);
-  // }, [lmArray, lmIndex, lmFcs]);
-
-  // const [loaded, setLoaded] = useState(false);
-  // useEffect(() => {
-  //   document.getElementById("rightPreview") ? setLoaded(true) : setLoaded(false);
-  // }, [document.getElementById("rightPreview")]);
 
   return (
     <>
@@ -116,25 +93,17 @@ function App() {
                 setLmArray={setLmArray}
                 lmIndex={lmIndex}
                 setLmIndex={setLmIndex}
-                lmFcs={lmFcs}
-                setLmFcs={setLmFcs}
                 setFcIndex={setFcIndex}
                 url={url}
               />
             </div>
             <div id="fcPane">
               <FcPane
-                fcArray={
-                  lmFcs[lmArray[lmIndex]._id] != null
-                    ? lmFcs[lmArray[lmIndex]._id]
-                    : []
-                }
-                // setFcArray={setFcArray}
+                lmArray={lmArray}
+                setLmArray={setLmArray}
+                lmIndex={lmIndex}
                 fcIndex={fcIndex}
                 setFcIndex={setFcIndex}
-                lmFcs={lmFcs}
-                setLmFcs={setLmFcs}
-                lm_id={lmArray.length > 0 ? lmArray[lmIndex]._id : ""}
               />
             </div>
             <div id="authPane">
@@ -144,14 +113,13 @@ function App() {
             </div>
           </div>
           <div id="rightPreview">
-            {lmArray.length > 0 &&
-              lmFcs[lmArray[lmIndex]._id] != null &&
-              lmFcs[lmArray[lmIndex]._id].length > 0 && (
-                <PreviewPane
-                  flashcard={lmFcs[lmArray[lmIndex]._id][fcIndex]}
-                  flashcards={lmFcs[lmArray[lmIndex]._id]}
-                />
-              )}
+            {lmArray.length > 0 && lmArray[lmIndex].flashcards != undefined && (
+              <PreviewPane
+                lmArray={lmArray}
+                lmIndex={lmIndex}
+                fcIndex={fcIndex}
+              />
+            )}
           </div>
         </>
       )}
