@@ -1,7 +1,8 @@
 import { Flashcard, Lm } from "../../types";
+import { makePutReq } from "../../utils";
 
 import { FcDropdownItem } from ".";
-import { makePutReq } from "../../utils";
+import "./styles/FcVisibilityDropdown.css";
 
 interface Props {
   lmArray: Lm[];

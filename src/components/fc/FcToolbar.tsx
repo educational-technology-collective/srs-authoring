@@ -3,6 +3,7 @@ import { Lm } from "../../types";
 import { getFcPosition, makeDeleteReq, makePutReq } from "../../utils";
 
 import { FcVisibilityDropdown } from ".";
+import "./styles/FcToolbar.css";
 
 interface Props {
   lmArray: Lm[];
@@ -74,7 +75,7 @@ const FcToolbar = ({
   };
 
   return (
-    <div>
+    <div id="fcToolbarContainer">
       <FcVisibilityDropdown
         lmArray={lmArray}
         lmIndex={lmIndex}

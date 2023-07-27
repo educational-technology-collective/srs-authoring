@@ -3,6 +3,7 @@ import { Flashcard, Lm } from "../../types";
 import { getFcPosition, makePostReq } from "../../utils";
 
 import { FcDropdownItem } from ".";
+import "./styles/FcCreator.css";
 
 interface Props {
   lmArray: Lm[];

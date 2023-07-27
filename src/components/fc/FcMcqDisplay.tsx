@@ -51,7 +51,7 @@ const FcMcqDisplay = ({
         <textarea
           id="fcFormQuestions"
           className="fcFormInput"
-          rows={6}
+          rows={8}
           name="question"
           value={qBuffer}
           onChange={(e) => setQBuffer(e.target.value)}
@@ -62,7 +62,7 @@ const FcMcqDisplay = ({
         <textarea
           id="fcFormAnswers"
           className="fcFormInput"
-          rows={12}
+          rows={14}
           name="answers"
           value={aBuffer}
           onChange={(e) => setABuffer(e.target.value)}

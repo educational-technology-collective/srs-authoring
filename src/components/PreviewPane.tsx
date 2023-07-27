@@ -1,7 +1,8 @@
+import { Lm } from "../types";
+
 import { flashCard } from "./from-haytham-new/types";
 import Card from "./from-haytham-new/Card";
 import "./styles/PreviewPane.css";
-import { Lm } from "../types";
 
 interface Props {
   lmArray: Lm[];

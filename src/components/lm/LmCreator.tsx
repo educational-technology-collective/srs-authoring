@@ -7,6 +7,7 @@ import {
 } from "../../utils";
 
 import { LmDropdownItem } from "./LmDropdownItem";
+import "./styles/LmCreator.css";
 
 interface Props {
   lmArray: Lm[];
@@ -20,8 +21,9 @@ const LmCreator = ({ lmArray, setLmArray, setLmIndex, url }: Props) => {
   const [typeBuffer, setTypeBuffer] = useState("playback");
 
   const handleSubmit = () => {
-    const courseTitle = url.split("/")[2];
-    const videoTitle = url.split("/")[-1];
+    const urlSlugs = url.split("/");
+    const courseTitle = urlSlugs[4];
+    const videoTitle = urlSlugs.slice(-1)[0];
 
     const newLm: CourseraPlaybackLm = {
       _id: "",

@@ -1,5 +1,7 @@
 import { Lm } from "../../types";
 
+import "./styles/FcSelector.css";
+
 interface Props {
   lmArray: Lm[];
   lmIndex: number;

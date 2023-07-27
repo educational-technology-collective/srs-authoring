@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.tsx";
 import { Auth0Provider } from "@auth0/auth0-react";
+
+import App from "./App.tsx";
 import "./styles/index.css";
 
 console.log(window.location.origin);

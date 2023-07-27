@@ -1,8 +1,8 @@
 import React from "react";
+import { Lm } from "../../types";
 
 import { FcSelector } from ".";
 import "./styles/FcNavbar.css";
-import { Lm } from "../../types";
 
 interface Props {
   lmArray: Lm[];

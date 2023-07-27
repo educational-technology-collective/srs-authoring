@@ -8,6 +8,7 @@ import {
 } from "../../utils";
 
 import { LmVisibilityDropdown } from ".";
+import "./styles/LmToolbar.css";
 
 interface Props {
   lmArray: Lm[];
