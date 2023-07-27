@@ -13,6 +13,7 @@ interface Props {
   setFcIndex: React.Dispatch<React.SetStateAction<number>>;
   qBuffer: string;
   aBuffer: string;
+  srcBuffer: string;
 }
 
 const FcToolbar = ({
@@ -23,11 +24,12 @@ const FcToolbar = ({
   setFcIndex,
   qBuffer,
   aBuffer,
+  srcBuffer,
 }: Props) => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    const newLmArray = JSON.parse(JSON.stringify(lmArray));
+    const newLmArray = [...lmArray];
 
     newLmArray[lmIndex].flashcards[fcIndex].content.question = qBuffer;
     if (lmArray[lmIndex].flashcards[fcIndex].type === "mcq") {
@@ -36,6 +38,7 @@ const FcToolbar = ({
     } else if (lmArray[lmIndex].flashcards[fcIndex].type === "qa") {
       newLmArray[lmIndex].flashcards[fcIndex].content.answer = aBuffer;
     }
+    newLmArray[lmIndex].flashcards[fcIndex].source = srcBuffer;
 
     // Push changes to server.
     const payload = newLmArray[lmIndex].flashcards[fcIndex];
@@ -48,7 +51,7 @@ const FcToolbar = ({
   };
 
   const handleDelete = () => {
-    const newLmArray = JSON.parse(JSON.stringify(lmArray));
+    const newLmArray = [...lmArray];
 
     if (lmArray[lmIndex].flashcards.length > 0) {
       // Push changes to server.

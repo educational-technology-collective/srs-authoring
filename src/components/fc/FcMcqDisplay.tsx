@@ -28,6 +28,9 @@ const FcMcqDisplay = ({
       lmArray[lmIndex].flashcards[fcIndex].content.answer as McqAnswer[]
     )
   );
+  const [srcBuffer, setSrcBuffer] = useState(
+    lmArray[lmIndex].flashcards[fcIndex].source
+  );
 
   useEffect(() => {
     if (lmArray[lmIndex].flashcards.length > 0) {
@@ -62,10 +65,21 @@ const FcMcqDisplay = ({
         <textarea
           id="fcFormAnswers"
           className="fcFormInput"
-          rows={14}
+          rows={13}
           name="answers"
           value={aBuffer}
           onChange={(e) => setABuffer(e.target.value)}
+        />
+        <label className="fcFormLabel" htmlFor="source">
+          S:
+        </label>
+        <textarea
+          id="fcFormSource"
+          className="fcFormInput"
+          rows={1}
+          name="source"
+          value={srcBuffer}
+          onChange={(e) => setSrcBuffer(e.target.value)}
         />
       </form>
       <FcToolbar
@@ -76,6 +90,7 @@ const FcMcqDisplay = ({
         setFcIndex={setFcIndex}
         qBuffer={qBuffer}
         aBuffer={aBuffer}
+        srcBuffer={srcBuffer}
       />
     </div>
   );

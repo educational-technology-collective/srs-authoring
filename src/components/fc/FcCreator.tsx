@@ -45,7 +45,7 @@ const FcCreator = ({ lmArray, setLmArray, lmIndex, setFcIndex }: Props) => {
       .catch((e) => console.log(e));
 
     // Push changes locally.
-    const newLmArray = JSON.parse(JSON.stringify(lmArray));
+    const newLmArray = [...lmArray];
     newLmArray[lmIndex].flashcards.push(newFc);
     setLmArray(newLmArray);
     setFcIndex(getFcPosition(newLmArray[lmIndex].flashcards, newFc));
