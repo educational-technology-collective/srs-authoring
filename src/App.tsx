@@ -55,11 +55,13 @@ function App() {
         console.log("Error while initially fetching URL", err);
       });
 
-    const videoUrlRegex =
-      /^https:\/\/www.coursera.org\/learn\/.*\/lecture\/.*$/;
+    const learnVideoUrlRegex =
+      /^https:\/\/www.coursera.org\/learn\/siads505\/lecture\/.*$/;
+    const teachVideoUrlRegex =
+      /^https:\/\/www.coursera.org\/teach\/siads505\/.*\/lecture\/.*$/;
 
-    // Check if url is valid video.
-    if (url && videoUrlRegex.test(url)) {
+    // Check if url is valid.
+    if (url && (learnVideoUrlRegex.test(url) || teachVideoUrlRegex.test(url))) {
       (async () => {
         const lms: Lm[] = await makeGetReqWithParam("/lms/search", [
           ["videoUrl", url],
