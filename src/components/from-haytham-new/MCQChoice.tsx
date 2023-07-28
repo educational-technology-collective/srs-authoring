@@ -23,12 +23,17 @@ export const IncorrectChoice: React.FC<{
   // };
 
   // Style for the button
-  const buttonStyle: string = clicked ? "choice-button incorrect-button" : "choice-button initial-button";
+  const buttonStyle: string = clicked
+    ? "choice-button incorrect-button"
+    : "choice-button";
 
   // Component Being Rendered
   return (
     <IonButton className={buttonStyle}>
-      <ReactMarkdown className="choice-text" children={choiceText}></ReactMarkdown>
+      <ReactMarkdown
+        className="choice-text"
+        children={choiceText}
+      ></ReactMarkdown>
     </IonButton>
   );
 };
@@ -49,12 +54,17 @@ export const CorrectChoice: React.FC<{
   // };
 
   // Style for the button
-  const buttonStyle: string = clicked ? "choice-button correct-button" : "choice-button initial-button";
+  const buttonStyle: string = clicked
+    ? "choice-button correct-button"
+    : "choice-button";
 
   // Component Being Rendered
   return (
     <IonButton className={buttonStyle}>
-      <ReactMarkdown className="choice-text" children={choiceText}></ReactMarkdown>
+      <ReactMarkdown
+        className="choice-text"
+        children={choiceText}
+      ></ReactMarkdown>
     </IonButton>
   );
 };

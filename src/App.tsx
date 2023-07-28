@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { makeGetReqWithParam } from "./utils";
-import { Flashcard, Lm, LmFcs } from "./types";
+import { Lm } from "./types";
 
 import { LandingPage, LogoutButton, PreviewPane } from "./components";
 import { LmPane } from "./components/lm";
@@ -29,9 +29,7 @@ function App() {
   // State definitions hold LM and FC data for the current Coursera video.
   const [lmArray, setLmArray] = useState([] as Lm[]);
   const [lmIndex, setLmIndex] = useState(0);
-  const [fcArray, setFcArray] = useState([] as Flashcard[]);
   const [fcIndex, setFcIndex] = useState(0);
-  const [lmFcs, setLmFcs] = useState({} as LmFcs);
 
   // Listens to subsequent URL change info sent by the service worker.
   const [url, setUrl] = useState("");
@@ -44,6 +42,9 @@ function App() {
 
   // On URL change, get new LMs and associated FCs.
   useEffect(() => {
+    setLmArray([]);
+    setLmIndex(0);
+    setFcIndex(0);
     // Grab URL when the extension first loads.
     chrome.tabs
       .query({ active: true, lastFocusedWindow: true })
@@ -54,51 +55,30 @@ function App() {
         console.log("Error while initially fetching URL", err);
       });
 
-    const videoUrlRegex =
-      /^https:\/\/www.coursera.org\/learn\/.*\/lecture\/.*$/;
+    const learnVideoUrlRegex =
+      /^https:\/\/www.coursera.org\/learn\/siads505\/lecture\/.*$/;
+    const teachVideoUrlRegex =
+      /^https:\/\/www.coursera.org\/teach\/siads505\/.*\/lecture\/.*$/;
 
-    // Check if url is valid video.
-    if (url && videoUrlRegex.test(url)) {
+    // Check if url is valid.
+    if (url && (learnVideoUrlRegex.test(url) || teachVideoUrlRegex.test(url))) {
       (async () => {
         const lms: Lm[] = await makeGetReqWithParam("/lms/search", [
           ["videoUrl", url],
         ]);
 
-        setLmArray(lms);
         for (let i = 0; i < lms.length; ++i) {
           const fcs = await makeGetReqWithParam("/flashcards/search", [
             ["lm_id", lms[i]._id],
           ]);
 
-          if (fcs) {
-            lmFcs[lms[i]._id] = fcs;
-          } else {
-            lmFcs[lms[i]._id] = [];
-          }
-
-          setLmFcs(lmFcs);
-          setFcArray(lmFcs[lms[lmIndex]._id]);
+          lms[i].flashcards = fcs;
         }
+
+        setLmArray(lms);
       })();
     }
   }, [url]);
-
-  // On updates to lmArray, lmIndex, lmFcs, or url, update fcArray.
-  useEffect(() => {
-    // Sync current LM and corresponding FCs.
-    if (lmArray.length > 0) {
-      setFcArray(lmFcs[lmArray[lmIndex]._id]);
-    } else {
-      setFcArray([]);
-    }
-
-    console.log("fcArray:", fcArray);
-  }, [lmArray, lmIndex, lmFcs, url]);
-
-  // const [loaded, setLoaded] = useState(false);
-  // useEffect(() => {
-  //   document.getElementById("rightPreview") ? setLoaded(true) : setLoaded(false);
-  // }, [document.getElementById("rightPreview")]);
 
   return (
     <>
@@ -115,20 +95,17 @@ function App() {
                 setLmArray={setLmArray}
                 lmIndex={lmIndex}
                 setLmIndex={setLmIndex}
-                lmFcs={lmFcs}
-                setLmFcs={setLmFcs}
+                setFcIndex={setFcIndex}
                 url={url}
               />
             </div>
             <div id="fcPane">
               <FcPane
-                fcArray={fcArray}
-                setFcArray={setFcArray}
+                lmArray={lmArray}
+                setLmArray={setLmArray}
+                lmIndex={lmIndex}
                 fcIndex={fcIndex}
                 setFcIndex={setFcIndex}
-                lmFcs={lmFcs}
-                setLmFcs={setLmFcs}
-                lm_id={lmArray.length > 0 ? lmArray[lmIndex]._id : ""}
               />
             </div>
             <div id="authPane">
@@ -138,8 +115,12 @@ function App() {
             </div>
           </div>
           <div id="rightPreview">
-            {fcArray && fcArray.length > 0 && (
-              <PreviewPane flashcard={fcArray[fcIndex]} flashcards={fcArray} />
+            {lmArray.length > 0 && lmArray[lmIndex].flashcards != undefined && (
+              <PreviewPane
+                lmArray={lmArray}
+                lmIndex={lmIndex}
+                fcIndex={fcIndex}
+              />
             )}
           </div>
         </>
