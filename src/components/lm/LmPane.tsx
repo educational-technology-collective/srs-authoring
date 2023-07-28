@@ -37,6 +37,7 @@ const LmPane = ({
             setLmArray={setLmArray}
             lmIndex={lmIndex}
             setLmIndex={setLmIndex}
+            setFcIndex={setFcIndex}
           />
         )}
       <LmCreator

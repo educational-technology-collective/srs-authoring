@@ -10,6 +10,7 @@ interface Props {
   setLmArray: React.Dispatch<React.SetStateAction<Lm[]>>;
   lmIndex: number;
   setLmIndex: React.Dispatch<React.SetStateAction<number>>;
+  setFcIndex: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const LmCourseraPlaybackDisplay = ({
@@ -17,6 +18,7 @@ const LmCourseraPlaybackDisplay = ({
   setLmArray,
   lmIndex,
   setLmIndex,
+  setFcIndex,
 }: Props) => {
   // Cast the general LM to a coursera-playback LM.
   const cpLm: CourseraPlaybackLm = lmArray[lmIndex] as CourseraPlaybackLm;
@@ -91,6 +93,7 @@ const LmCourseraPlaybackDisplay = ({
         setLmArray={setLmArray}
         lmIndex={lmIndex}
         setLmIndex={setLmIndex}
+        setFcIndex={setFcIndex}
         startTimeBuffer={startTimeBuffer}
         endTimeBuffer={endTimeBuffer}
         conceptsBuffer={conceptsBuffer}
