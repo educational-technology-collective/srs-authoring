@@ -1,10 +1,20 @@
+import { Lm } from "../../types";
+
+import "./styles/FcSelector.css";
+
 interface Props {
+  lmArray: Lm[];
+  lmIndex: number;
   fcIndex: number;
   setFcIndex: React.Dispatch<React.SetStateAction<number>>;
-  numFcs: number;
 }
 
-const FcSelector = ({ fcIndex, setFcIndex, numFcs }: Props) => {
+const FcSelector = ({ lmArray, lmIndex, fcIndex, setFcIndex }: Props) => {
+  let numFcs = 0;
+  if (lmArray.length > 0 && lmArray[lmIndex].flashcards != undefined) {
+    numFcs = lmArray[lmIndex].flashcards?.length as number;
+  }
+
   const handlePrev = () => {
     // Ignore interaction when there are no LMs.
     if (numFcs === 0) {

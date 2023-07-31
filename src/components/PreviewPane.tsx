@@ -1,35 +1,36 @@
+import { Lm } from "../types";
+
 import { flashCard } from "./from-haytham-new/types";
 import Card from "./from-haytham-new/Card";
 import "./styles/PreviewPane.css";
-import { Flashcard } from "../types";
 
 interface Props {
-  flashcard: Flashcard;
-  flashcards: Flashcard[];
+  lmArray: Lm[];
+  lmIndex: number;
+  fcIndex: number;
 }
 
-const PreviewPane = ({ flashcard, flashcards }: Props) => {
-  // convert from one interface to another
-  let flashcard2: flashCard = {
+const PreviewPane = ({ lmArray, lmIndex, fcIndex }: Props) => {
+  let flashcard: flashCard = {
     _id: "",
     lmid: "",
     type: "",
     content: { question: "", answer: {} },
   };
 
-  if (flashcard && flashcards.length > 0) {
-    flashcard2._id = flashcard._id;
-    flashcard2.lmid = flashcard.lm_id;
-    flashcard2.type = flashcard.type;
-    flashcard2.content = flashcard.content;
-  }
+  const flashcards = lmArray[lmIndex].flashcards;
 
-  // console.log("previewing:", flashcard2);
+  if (flashcards && flashcards.length > 0) {
+    flashcard._id = flashcards[fcIndex]._id;
+    flashcard.lmid = flashcards[fcIndex].lm_id;
+    flashcard.type = flashcards[fcIndex].type;
+    flashcard.content = flashcards[fcIndex].content;
+  }
 
   return (
     <>
-      {flashcard && flashcard2 && (
-        <Card obj={flashcard2} isEmpty={flashcards.length > 0 ? false : true} />
+      {flashcards && flashcard && (
+        <Card obj={flashcard} isEmpty={flashcards.length > 0 ? false : true} />
       )}
     </>
   );

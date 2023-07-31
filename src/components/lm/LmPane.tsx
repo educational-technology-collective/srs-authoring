@@ -1,16 +1,15 @@
+import React from "react";
+import { Lm } from "../../types";
+
 import { LmNavbar, LmCourseraPlaybackDisplay, LmCreator } from ".";
 import "./styles/LmPane.css";
-
-import React from "react";
-import { Lm, LmFcs } from "../../types";
 
 interface Props {
   lmArray: Lm[];
   setLmArray: React.Dispatch<React.SetStateAction<Lm[]>>;
   lmIndex: number;
   setLmIndex: React.Dispatch<React.SetStateAction<number>>;
-  lmFcs: LmFcs;
-  setLmFcs: React.Dispatch<React.SetStateAction<LmFcs>>;
+  setFcIndex: React.Dispatch<React.SetStateAction<number>>;
   url: string;
 }
 
@@ -19,8 +18,7 @@ const LmPane = ({
   setLmArray,
   lmIndex,
   setLmIndex,
-  lmFcs,
-  setLmFcs,
+  setFcIndex,
   url,
 }: Props) => {
   return (
@@ -29,6 +27,7 @@ const LmPane = ({
         lmIndex={lmIndex}
         setLmIndex={setLmIndex}
         numLms={lmArray.length}
+        setFcIndex={setFcIndex}
       />
       {lmArray.length > 0 &&
         lmArray[lmIndex].platform === "coursera" &&
@@ -38,16 +37,13 @@ const LmPane = ({
             setLmArray={setLmArray}
             lmIndex={lmIndex}
             setLmIndex={setLmIndex}
-            lmFcs={lmFcs}
-            setLmFcs={setLmFcs}
+            setFcIndex={setFcIndex}
           />
         )}
       <LmCreator
         lmArray={lmArray}
         setLmArray={setLmArray}
         setLmIndex={setLmIndex}
-        lmFcs={lmFcs}
-        setLmFcs={setLmFcs}
         url={url}
       />
     </div>

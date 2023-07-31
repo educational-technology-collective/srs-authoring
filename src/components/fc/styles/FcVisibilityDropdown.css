@@ -1,0 +1,9 @@
+#fcDropdownContainer {
+    flex-grow: 1;
+    height: 100%;
+}
+
+#fcSelectMenu {
+    width: 100%;
+    height: 100%;
+}

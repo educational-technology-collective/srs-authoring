@@ -1,5 +1,5 @@
 import { FormEvent } from "react";
-import { CourseraPlaybackLm, Lm, LmFcs } from "../../types";
+import { CourseraPlaybackLm, Lm } from "../../types";
 import {
   compareCourseraPlaybackLm,
   getCourseraPlaybackLmPosition,
@@ -8,15 +8,14 @@ import {
 } from "../../utils";
 
 import { LmVisibilityDropdown } from ".";
+import "./styles/LmToolbar.css";
 
 interface Props {
   lmArray: Lm[];
   setLmArray: React.Dispatch<React.SetStateAction<Lm[]>>;
   lmIndex: number;
   setLmIndex: React.Dispatch<React.SetStateAction<number>>;
-  lmFcs: LmFcs;
-  setLmFcs: React.Dispatch<React.SetStateAction<LmFcs>>;
-  videoUrlBuffer: string;
+  setFcIndex: React.Dispatch<React.SetStateAction<number>>;
   startTimeBuffer: string;
   endTimeBuffer: string;
   conceptsBuffer: string;
@@ -27,22 +26,22 @@ const LmToolbar = ({
   setLmArray,
   lmIndex,
   setLmIndex,
-  lmFcs,
-  setLmFcs,
-  videoUrlBuffer,
+  setFcIndex,
   startTimeBuffer,
   endTimeBuffer,
   conceptsBuffer,
 }: Props) => {
-  console.log(videoUrlBuffer, startTimeBuffer, endTimeBuffer, conceptsBuffer);
+  console.log(startTimeBuffer, endTimeBuffer, conceptsBuffer);
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    const newLmArray: CourseraPlaybackLm[] = JSON.parse(
-      JSON.stringify(lmArray)
-    );
+    const newLmArray: CourseraPlaybackLm[] = [
+      ...(lmArray as CourseraPlaybackLm[]),
+    ];
+    // const newLmArray: CourseraPlaybackLm[] = JSON.parse(
+    //   JSON.stringify(lmArray)
+    // );
 
-    newLmArray[lmIndex].content.videoUrl = videoUrlBuffer;
     newLmArray[lmIndex].content.startTime = startTimeBuffer;
     newLmArray[lmIndex].content.endTime = endTimeBuffer;
     newLmArray[lmIndex].content.concepts = conceptsBuffer.split(", ");
@@ -63,16 +62,18 @@ const LmToolbar = ({
   const handleDelete = () => {
     // Create a new LM array without the LM that we deleted.
     // Then set that as the most recent array.
-    const newLmArray: CourseraPlaybackLm[] = JSON.parse(
-      JSON.stringify(lmArray)
-    );
+    const newLmArray: CourseraPlaybackLm[] = [
+      ...(lmArray as CourseraPlaybackLm[]),
+    ];
+    // const newLmArray: CourseraPlaybackLm[] = JSON.parse(
+    //   JSON.stringify(lmArray)
+    // );
 
     if (lmArray.length > 0) {
       // Push changes to server.
       makeDeleteReq(`/lms/id/${lmArray[lmIndex]._id}`);
 
       newLmArray.splice(lmIndex, 1);
-      delete lmFcs[lmArray[lmIndex]._id];
 
       if (lmArray.length === 1) {
         setLmIndex(0);
@@ -85,8 +86,8 @@ const LmToolbar = ({
         }
       }
 
+      setFcIndex(0);
       setLmArray(newLmArray);
-      setLmFcs(lmFcs);
     }
   };
 

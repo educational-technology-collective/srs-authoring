@@ -1,10 +1,10 @@
-#lmSelectorContainer {
+#fcSelectorContainer {
     display: flex;
     flex-direction: row;
     align-items: center;
 }
 
-#lmCounter {
+#fcCounter {
     margin-left: 0.5em;
     margin-right: 0.5em;
 }

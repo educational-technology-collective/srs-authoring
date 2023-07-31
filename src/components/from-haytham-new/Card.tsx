@@ -177,7 +177,7 @@ const Card: React.FC<{
     cardCompBack = <QA obj={obj} clicked={true} />;
     cardContentStyle = "card-content qa-card-content";
   } else {
-    if (obj.type === "q") {
+    if (obj.type === "qa") {
       cardCompBack = <QA obj={obj} clicked={true} />;
       cardContentStyle = "card-content qa-card-content";
     } else {
@@ -193,7 +193,10 @@ const Card: React.FC<{
   return (
     <div className="card-wrapper">
       <IonCard className="card-container">
-        <div className={cardContentStyle} style={{ background: "rgba(251,255,236,1)" }}>
+        <div
+          className={cardContentStyle}
+          style={{ background: "rgba(251,255,236,1)" }}
+        >
           {cardCompBack}
         </div>
       </IonCard>

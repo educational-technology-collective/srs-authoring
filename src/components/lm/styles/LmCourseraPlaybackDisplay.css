@@ -5,7 +5,7 @@
 
 #lmForm {
     display: grid;
-    grid-template-columns: 25% 75%;
+    grid-template-columns: 30% 70%;
 }
 
 .lmFormLabel {
@@ -22,4 +22,11 @@
     resize: none;
     /* height: 30%; */
     word-wrap: break-word;
+}
+
+#videoUrlSpan {
+    white-space: nowrap;
+    /* height: 1em; */
+    text-overflow: ellipsis;
+    overflow: hidden;
 }

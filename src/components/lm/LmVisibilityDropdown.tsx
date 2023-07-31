@@ -1,7 +1,8 @@
-import { LmDropdownItem } from ".";
-
 import { CourseraPlaybackLm, Lm } from "../../types";
 import { makePutReq } from "../../utils";
+
+import { LmDropdownItem } from ".";
+import "./styles/LmVisibilityDropdown.css";
 
 interface Props {
   lmArray: Lm[];
@@ -13,7 +14,9 @@ const LmVisibilityDropdown = ({ lmArray, setLmArray, lmIndex }: Props) => {
   const handleChange = () => {
     if (lmArray.length > 0) {
       const e = document.getElementById("lmSelectMenu") as HTMLSelectElement;
-      const newLmArray: CourseraPlaybackLm[] = JSON.parse(JSON.stringify(lmArray));
+      const newLmArray: CourseraPlaybackLm[] = JSON.parse(
+        JSON.stringify(lmArray)
+      );
       newLmArray[lmIndex].visibility = e.value;
       setLmArray(newLmArray);
 

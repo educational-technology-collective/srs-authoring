@@ -1,65 +1,67 @@
 import { FormEvent } from "react";
-import { Flashcard, LmFcs } from "../../types";
+import { Lm } from "../../types";
 import { getFcPosition, makeDeleteReq, makePutReq } from "../../utils";
 
 import { FcVisibilityDropdown } from ".";
+import "./styles/FcToolbar.css";
 
 interface Props {
-  fcArray: Flashcard[];
-  setFcArray: React.Dispatch<React.SetStateAction<Flashcard[]>>;
+  lmArray: Lm[];
+  setLmArray: React.Dispatch<React.SetStateAction<Lm[]>>;
+  lmIndex: number;
   fcIndex: number;
   setFcIndex: React.Dispatch<React.SetStateAction<number>>;
-  lmFcs: LmFcs;
-  setLmFcs: React.Dispatch<React.SetStateAction<LmFcs>>;
   qBuffer: string;
   aBuffer: string;
+  srcBuffer: string;
 }
 
 const FcToolbar = ({
-  fcArray,
-  setFcArray,
+  lmArray,
+  setLmArray,
+  lmIndex,
   fcIndex,
   setFcIndex,
-  lmFcs,
-  setLmFcs,
   qBuffer,
   aBuffer,
+  srcBuffer,
 }: Props) => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    const newFcArray: Flashcard[] = JSON.parse(JSON.stringify(fcArray));
+    const newLmArray = [...lmArray];
 
-    newFcArray[fcIndex].content.question = qBuffer;
-    if (fcArray[fcIndex].type === "m") {
-      newFcArray[fcIndex].content.answer = JSON.parse(aBuffer);
-    } else if (fcArray[fcIndex].type === "q") {
-      newFcArray[fcIndex].content.answer = aBuffer;
+    newLmArray[lmIndex].flashcards[fcIndex].content.question = qBuffer;
+    if (lmArray[lmIndex].flashcards[fcIndex].type === "mcq") {
+      newLmArray[lmIndex].flashcards[fcIndex].content.answer =
+        JSON.parse(aBuffer);
+    } else if (lmArray[lmIndex].flashcards[fcIndex].type === "qa") {
+      newLmArray[lmIndex].flashcards[fcIndex].content.answer = aBuffer;
     }
+    newLmArray[lmIndex].flashcards[fcIndex].source = srcBuffer;
 
     // Push changes to server.
-    const payload = newFcArray[fcIndex];
+    const payload = newLmArray[lmIndex].flashcards[fcIndex];
     console.log("payload:", payload);
     makePutReq("/flashcards", payload);
 
     // Push changes locally.
-    setFcArray(newFcArray);
-    setFcIndex(getFcPosition(newFcArray, payload));
-    lmFcs[payload.lm_id][fcIndex] = payload;
-    setLmFcs(lmFcs);
+    setLmArray(newLmArray);
+    setFcIndex(getFcPosition(newLmArray[lmIndex].flashcards, payload));
   };
 
   const handleDelete = () => {
-    const newFcArray: Flashcard[] = JSON.parse(JSON.stringify(fcArray));
+    const newLmArray = [...lmArray];
 
-    if (fcArray.length > 0) {
+    if (lmArray[lmIndex].flashcards.length > 0) {
       // Push changes to server.
-      makeDeleteReq(`/flashcards/id/${fcArray[fcIndex]._id}`);
+      makeDeleteReq(
+        `/flashcards/id/${lmArray[lmIndex].flashcards[fcIndex]._id}`
+      );
 
-      newFcArray.splice(fcIndex, 1);
-      lmFcs[fcArray[fcIndex].lm_id].splice(fcIndex, 1);
+      newLmArray[lmIndex].flashcards.splice(fcIndex, 1);
 
-      if (fcArray.length === 1) {
+      if (lmArray[lmIndex].flashcards.length === 1) {
         setFcIndex(0);
       } else {
         // If index is 0, keep it at 0.
@@ -71,19 +73,16 @@ const FcToolbar = ({
       }
 
       // Push changes locally.
-      setFcArray(newFcArray);
-      setLmFcs(lmFcs);
+      setLmArray(newLmArray);
     }
   };
 
   return (
-    <div>
+    <div id="fcToolbarContainer">
       <FcVisibilityDropdown
-        fcArray={fcArray}
-        setFcArray={setFcArray}
+        lmArray={lmArray}
+        lmIndex={lmIndex}
         fcIndex={fcIndex}
-        lmFcs={lmFcs}
-        setLmFcs={setLmFcs}
       />
       <button form="fcForm" onClick={handleSubmit}>
         Submit

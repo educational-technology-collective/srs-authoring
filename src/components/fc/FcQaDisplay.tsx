@@ -1,38 +1,41 @@
 import { useEffect, useState } from "react";
-import { Flashcard, LmFcs } from "../../types";
+import { Lm } from "../../types";
 
 import { FcToolbar } from ".";
 import "./styles/FcQaDisplay.css";
 
 interface Props {
-  fcArray: Flashcard[];
-  setFcArray: React.Dispatch<React.SetStateAction<Flashcard[]>>;
+  lmArray: Lm[];
+  setLmArray: React.Dispatch<React.SetStateAction<Lm[]>>;
+  lmIndex: number;
   fcIndex: number;
   setFcIndex: React.Dispatch<React.SetStateAction<number>>;
-  lmFcs: LmFcs;
-  setLmFcs: React.Dispatch<React.SetStateAction<LmFcs>>;
 }
 
 const FcQaDisplay = ({
-  fcArray,
-  setFcArray,
+  lmArray,
+  setLmArray,
+  lmIndex,
   fcIndex,
   setFcIndex,
-  lmFcs,
-  setLmFcs,
 }: Props) => {
   // Buffer states to hold temporary data.
-  const [qBuffer, setQBuffer] = useState(fcArray[fcIndex].content.question);
+  const [qBuffer, setQBuffer] = useState(
+    lmArray[lmIndex].flashcards[fcIndex].content.question
+  );
   const [aBuffer, setABuffer] = useState(
-    fcArray[fcIndex].content.answer as string
+    lmArray[lmIndex].flashcards[fcIndex].content.answer as string
+  );
+  const [srcBuffer, setSrcBuffer] = useState(
+    lmArray[lmIndex].flashcards[fcIndex].source
   );
 
   useEffect(() => {
-    if (fcArray.length > 0) {
-      setQBuffer(fcArray[fcIndex].content.question);
-      setABuffer(fcArray[fcIndex].content.answer as string);
+    if (lmArray[lmIndex].flashcards.length > 0) {
+      setQBuffer(lmArray[lmIndex].flashcards[fcIndex].content.question);
+      setABuffer(lmArray[lmIndex].flashcards[fcIndex].content.answer as string);
     }
-  }, [fcArray, fcIndex]);
+  }, [lmArray[lmIndex].flashcards, fcIndex]);
 
   return (
     <div id="fcQaDisplayContainer">
@@ -43,7 +46,7 @@ const FcQaDisplay = ({
         <textarea
           id="fcFormQuestions"
           className="fcFormInput"
-          rows={6}
+          rows={8}
           name="question"
           value={qBuffer}
           onChange={(e) => setQBuffer(e.target.value)}
@@ -54,21 +57,32 @@ const FcQaDisplay = ({
         <textarea
           id="fcFormAnswers"
           className="fcFormInput"
-          rows={12}
+          rows={13}
           name="answers"
           value={aBuffer}
           onChange={(e) => setABuffer(e.target.value)}
         />
+        <label className="fcFormLabel" htmlFor="source">
+          S:
+        </label>
+        <textarea
+          id="fcFormSource"
+          className="fcFormInput"
+          rows={1}
+          name="source"
+          value={srcBuffer}
+          onChange={(e) => setSrcBuffer(e.target.value)}
+        />
       </form>
       <FcToolbar
-        fcArray={fcArray}
-        setFcArray={setFcArray}
+        lmArray={lmArray}
+        setLmArray={setLmArray}
+        lmIndex={lmIndex}
         fcIndex={fcIndex}
         setFcIndex={setFcIndex}
-        lmFcs={lmFcs}
-        setLmFcs={setLmFcs}
         qBuffer={qBuffer}
         aBuffer={aBuffer}
+        srcBuffer={srcBuffer}
       />
     </div>
   );

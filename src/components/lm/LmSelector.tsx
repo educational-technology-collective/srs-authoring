@@ -4,9 +4,10 @@ interface Props {
   lmIndex: number;
   setLmIndex: React.Dispatch<React.SetStateAction<number>>;
   numLms: number;
+  setFcIndex: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const LmSelector = ({ lmIndex, setLmIndex, numLms }: Props) => {
+const LmSelector = ({ lmIndex, setLmIndex, numLms, setFcIndex }: Props) => {
   const handlePrev = () => {
     // Ignore interaction when there are no LMs.
     if (numLms === 0) {
@@ -18,6 +19,8 @@ const LmSelector = ({ lmIndex, setLmIndex, numLms }: Props) => {
     } else {
       setLmIndex((lmIndex - 1) % numLms);
     }
+
+    setFcIndex(0);
   };
 
   const handleNext = () => {
@@ -27,6 +30,8 @@ const LmSelector = ({ lmIndex, setLmIndex, numLms }: Props) => {
     }
 
     setLmIndex((lmIndex + 1) % numLms);
+
+    setFcIndex(0);
   };
 
   return (

@@ -20,12 +20,15 @@
 
 #fcFormQuestions {
     resize: none;
-    /* height: 30%; */
     word-wrap: break-word;
 }
 
 #fcFormAnswers {
     resize: none;
-    /* height: 50%; */
+    word-wrap: break-word;
+}
+
+#fcFormSource {
+    resize: none;
     word-wrap: break-word;
 }

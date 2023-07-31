@@ -1,38 +1,30 @@
 import React, { useState } from "react";
-import { Flashcard, LmFcs } from "../../types";
+import { Flashcard, Lm } from "../../types";
 import { getFcPosition, makePostReq } from "../../utils";
 
 import { FcDropdownItem } from ".";
+import "./styles/FcCreator.css";
 
 interface Props {
-  fcArray: Flashcard[];
-  setFcArray: React.Dispatch<React.SetStateAction<Flashcard[]>>;
+  lmArray: Lm[];
+  setLmArray: React.Dispatch<React.SetStateAction<Lm[]>>;
+  lmIndex: number;
   setFcIndex: React.Dispatch<React.SetStateAction<number>>;
-  lmFcs: LmFcs;
-  setLmFcs: React.Dispatch<React.SetStateAction<LmFcs>>;
-  lm_id: string;
 }
 
-const FcCreator = ({
-  fcArray,
-  setFcArray,
-  setFcIndex,
-  lmFcs,
-  setLmFcs,
-  lm_id,
-}: Props) => {
+const FcCreator = ({ lmArray, setLmArray, lmIndex, setFcIndex }: Props) => {
   // Buffer holds data until create button is clicked.
-  const [typeBuffer, setTypeBuffer] = useState("m");
+  const [typeBuffer, setTypeBuffer] = useState("mcq");
 
   const handleSubmit = () => {
     const newFc: Flashcard = {
       _id: "",
-      lm_id: lm_id,
+      lm_id: lmArray[lmIndex]._id,
       type: typeBuffer,
       content: {
         question: "",
         answer:
-          typeBuffer === "m"
+          typeBuffer === "mcq"
             ? [
                 { option: "Your_answer_here", isCorrect: true },
                 { option: "Your_answer_here", isCorrect: false },
@@ -52,12 +44,11 @@ const FcCreator = ({
       })
       .catch((e) => console.log(e));
 
-    const newFcArray: Flashcard[] = JSON.parse(JSON.stringify(fcArray));
-    newFcArray.push(newFc);
-    setFcArray(newFcArray);
-    setFcIndex(getFcPosition(newFcArray, newFc));
-    lmFcs[lm_id].push(newFc);
-    setLmFcs(lmFcs);
+    // Push changes locally.
+    const newLmArray = [...lmArray];
+    newLmArray[lmIndex].flashcards.push(newFc);
+    setLmArray(newLmArray);
+    setFcIndex(getFcPosition(newLmArray[lmIndex].flashcards, newFc));
   };
 
   return (
@@ -67,8 +58,8 @@ const FcCreator = ({
         id="fcTypeMenu"
         onChange={(e) => setTypeBuffer(e.target.value)}
       >
-        <FcDropdownItem value={"m"} />;
-        <FcDropdownItem value={"q"} />;
+        <FcDropdownItem value={"mcq"} />;
+        <FcDropdownItem value={"qa"} />;
       </select>
       <button onClick={handleSubmit}>Create</button>
     </div>

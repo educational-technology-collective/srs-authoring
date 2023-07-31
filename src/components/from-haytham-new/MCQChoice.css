@@ -10,11 +10,12 @@
 .choice-button {
   flex-grow: 1;
   white-space: normal;
-}
-
-.initial-button {
   --background: slateblue;
 }
+
+/* .initial-button {
+  --background: slateblue;
+} */
 
 /* Styling for the correct button after clicking */
 .correct-button {
