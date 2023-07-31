@@ -1,0 +1,23 @@
+#fcMcqChoiceContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+#fcMcqOption {
+    resize: none;
+    word-wrap: break-word;
+}
+
+#fcMcqChoiceBottomBarContainer {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+#fcMcqIsCorrect {
+    resize: none;
+    word-wrap: break-word;
+}

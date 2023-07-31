@@ -1,34 +1,19 @@
 #fcMcqDisplayContainer {
     display: flex;
     flex-direction: column;
+    height: 90%;
 }
 
-#fcForm {
-    display: grid;
-    grid-template-columns: 10% 90%;
-}
-
-.fcFormLabel {
-    grid-column: 1 / 2;
-    text-align: right;
-}
-
-.fcFormInput {
-    grid-column: 2 / 3;
-    margin-left: 2px;
-}
-
-#fcFormQuestions {
+#fcMcqQuestion {
     resize: none;
     word-wrap: break-word;
 }
 
-#fcFormAnswers {
-    resize: none;
-    word-wrap: break-word;
-}
-
-#fcFormSource {
-    resize: none;
-    word-wrap: break-word;
+#fcMcqAnsContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 65%;
+    max-height: 65%;
+    overflow: auto;
 }

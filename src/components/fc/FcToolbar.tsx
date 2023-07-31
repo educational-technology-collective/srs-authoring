@@ -1,5 +1,5 @@
 import { FormEvent } from "react";
-import { Lm } from "../../types";
+import { Lm, McqAnswer } from "../../types";
 import { getFcPosition, makeDeleteReq, makePutReq } from "../../utils";
 
 import { FcVisibilityDropdown } from ".";
@@ -11,9 +11,6 @@ interface Props {
   lmIndex: number;
   fcIndex: number;
   setFcIndex: React.Dispatch<React.SetStateAction<number>>;
-  qBuffer: string;
-  aBuffer: string;
-  srcBuffer: string;
 }
 
 const FcToolbar = ({
@@ -22,32 +19,28 @@ const FcToolbar = ({
   lmIndex,
   fcIndex,
   setFcIndex,
-  qBuffer,
-  aBuffer,
-  srcBuffer,
 }: Props) => {
+  const handleAdd = () => {
+    const newLmArray = [...lmArray];
+    (
+      newLmArray[lmIndex].flashcards[fcIndex].content.answer as McqAnswer[]
+    ).push({ option: "", isCorrect: false });
+
+    // Push changes locally.
+    setLmArray(newLmArray);
+  };
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    const newLmArray = [...lmArray];
-
-    newLmArray[lmIndex].flashcards[fcIndex].content.question = qBuffer;
-    if (lmArray[lmIndex].flashcards[fcIndex].type === "mcq") {
-      newLmArray[lmIndex].flashcards[fcIndex].content.answer =
-        JSON.parse(aBuffer);
-    } else if (lmArray[lmIndex].flashcards[fcIndex].type === "qa") {
-      newLmArray[lmIndex].flashcards[fcIndex].content.answer = aBuffer;
-    }
-    newLmArray[lmIndex].flashcards[fcIndex].source = srcBuffer;
-
     // Push changes to server.
-    const payload = newLmArray[lmIndex].flashcards[fcIndex];
+    const payload = lmArray[lmIndex].flashcards[fcIndex];
     console.log("payload:", payload);
     makePutReq("/flashcards", payload);
 
     // Push changes locally.
-    setLmArray(newLmArray);
-    setFcIndex(getFcPosition(newLmArray[lmIndex].flashcards, payload));
+    setLmArray(lmArray);
+    setFcIndex(getFcPosition(lmArray[lmIndex].flashcards, payload));
   };
 
   const handleDelete = () => {
@@ -84,9 +77,10 @@ const FcToolbar = ({
         lmIndex={lmIndex}
         fcIndex={fcIndex}
       />
-      <button form="fcForm" onClick={handleSubmit}>
-        Submit
-      </button>
+      {lmArray[lmIndex].flashcards[fcIndex].type === "mcq" && (
+        <button onClick={handleAdd}>+</button>
+      )}
+      <button onClick={handleSubmit}>Submit</button>
       <button onClick={handleDelete}>Delete</button>
     </div>
   );
