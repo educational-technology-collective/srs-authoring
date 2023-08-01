@@ -67,7 +67,7 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
+    <li><a href="#proposal">Proposal</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
@@ -134,6 +134,209 @@ This is an example of how to list things you need to use the software and how to
    ```sh
    npm run build
    ```
+4. Load unpacked extension in Chrome.
+5. Select `/dist` directory.
+6. Load the extension from Chrome's side panel.
+7. Go to the assigned Coursera page.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Proposal
+
+This write-up is a proposal for a new system design for the Ambient Learning project.
+
+### The Big Picture
+
+Below is the system design flowchart of the project.
+
+![]()
+
+### Clients
+
+We aim to serve three clients primarily:
+
+- Coursera Agent Chrome Extension
+- Coursera Authoring Chrome Extension
+- Mobile App
+
+JupyterLab client will be supported soon.
+
+Spaced repetition system will not use the exposed API from AWS, but will manipulate the database directly. The implementation details for the system is still under debate.
+
+### Auth
+
+There will be whitelisted users data inside Auth0.
+
+### Database Collections
+
+MongoDB is the database of choice here. The project will use four collections and one view:
+
+#### Collections
+
+- `lms`
+- `fcs`
+- `userStates`
+- `mobileTelemetry`
+
+#### Views
+
+- `userStates_fcs`
+
+### API Endpoints
+
+Below is the tree that lists out our proposed endpoints.
+
+```markdown
+/api
+/v1
+/lms
+`POST` (authoring)
+`PUT` (authoring)
+/search
+`GET` (authoring, agent)
+/{id}
+`DELETE` (authoring)
+/fcs
+`POST` (authoring)
+`PUT` (authoring)
+/search
+`GET` (authoring)
+/{id}
+`DELETE` (authoring)
+/{userId}
+/flashcards
+/now
+`GET` (mobile)
+/{lmId}
+`POST` (agent)
+`PUT` (mobile)
+/telemetry
+/mobile
+`POST` (mobile)
+```
+
+#### Coursera Agent Chrome Extension
+
+- `GET /api/v1/lms/search`
+  - Gets a list of learning moments given query parameters.
+  - Reads from lms collection.
+- `POST /api/v1/{userId}/{lmId}`
+  - Posts newly experienced learning moments to a given user.
+  - Writes to userStates collection.
+
+#### Coursera Authoring Chrome Extension
+
+- `GET /api/v1/lms/search`
+  - Gets a list of learning moments given query parameters.
+  - Reads from lms collection.
+- `GET /api/v1/fcs/search`
+  - Gets a list of flashcards given query parameters.
+  - Reads from fcs collection.
+- `POST /api/v1/lms`
+  - Posts a new learning moment.
+  - Writes to lms collection.
+- `POST /api/v1/fcs`
+  - Posts a new flashcard.
+  - Writes to fcs collection.
+- `PUT /api/v1/lms`
+  - Updates a learning moment.
+  - Writes to lms collection.
+- `PUT /api/v1/fcs`
+  - Updates a flashcard.
+  - Writes to fcs collection.
+- `DELETE /api/v1/lms/{lmId}`
+  - Deletes a given learning moment.
+  - Writes to lms collection.
+- `DELETE /api/v1/fcs/{fcId}`
+  - Deletes a given flashcard.
+  - Writes to fcs collection.
+
+#### Mobile App
+
+- `GET /api/v1/{userId}/flashcards/now`
+  - Gets a 2D list of flashcards for review today.
+  - Reads from userStates_fcs view.
+- `PUT /api/v1/{userId}/{lmId}`
+  - Updates the review record for each learning moment after user interaction with the mobile app.
+  - Writes to userStates collection.
+- `POST /api/v1/telemetry/mobile`
+  - Posts user telemetry data.
+  - Writes to mobileTelemetry collection.
+
+More endpoints will be added once JupyterLab support lands.
+
+### Schemas
+
+We propose these schemas for each collection.
+
+#### lms
+
+```json
+{
+  _id: ObjectId,
+  platform: String,
+  contentType: String,
+  content: Object,
+  visibility: String,
+}
+```
+
+#### fcs
+
+```json
+
+{
+  _id: ObjectId,
+  lm_id: ObjectId,
+  type: String,
+  content: Object,
+  visibility: String,
+  source: String,
+}
+```
+
+#### userStates
+
+```json
+{
+  userId: String,
+  lms: Object,
+}
+
+// Each lms key-value entry:
+lm_id as String key: {
+  reviewRecord: {
+    correct: Number,
+    incorrect: Number,
+    skipped: Number,
+    know: Number,
+    dontKnow: Number,
+    oneMore: Number,
+    poorCard: Number,
+  },
+  alg: {
+    prevInterval: Number,
+    prevFactor: Number,
+    nextReview: Date,
+  },
+  createdAt: Date,
+  updatedAt: Date,
+}
+```
+
+#### mobileTelemetry (undecided)
+
+```json
+{
+  userId: String,
+  lm_id: Number,
+  eventName: String,
+  eventTime: Date,
+  selfEval: String,
+  testEval: String,
+  isBuffer: Boolean,
+}
+```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
