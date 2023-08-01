@@ -149,7 +149,7 @@ This write-up is a proposal for a new system design for the Ambient Learning pro
 
 Below is the system design flowchart of the project.
 
-![]()
+![](https://github.com/educational-technology-collective/srs-authoring/blob/dev-jacob/public/Ambient%20Learning%20Project%20Flowchart%20Light.png)
 
 ### Clients
 
