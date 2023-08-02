@@ -109,7 +109,7 @@ function App() {
               />
             </div>
             <div id="authPane">
-              <p>Welcone, {user?.name}.</p>
+              <p>Welcome, {user?.name}.</p>
               <div id="spacer"></div>
               <LogoutButton />
             </div>
