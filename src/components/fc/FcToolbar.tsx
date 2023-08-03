@@ -78,10 +78,10 @@ const FcToolbar = ({
         fcIndex={fcIndex}
       />
       {lmArray[lmIndex].flashcards[fcIndex].type === "mcq" && (
-        <button onClick={handleAdd}>+</button>
+        <button onClick={handleAdd}>Add Choice</button>
       )}
-      <button onClick={handleSubmit}>Submit</button>
-      <button onClick={handleDelete}>Delete</button>
+      <button onClick={handleSubmit}>Save Changes</button>
+      <button onClick={handleDelete}>Delete Flashcard</button>
     </div>
   );
 };

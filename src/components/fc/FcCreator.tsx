@@ -61,7 +61,7 @@ const FcCreator = ({ lmArray, setLmArray, lmIndex, setFcIndex }: Props) => {
         <FcDropdownItem value={"mcq"} />;
         <FcDropdownItem value={"qa"} />;
       </select>
-      <button onClick={handleSubmit}>Create</button>
+      <button onClick={handleSubmit}>Create New Flashcard</button>
     </div>
   );
 };
