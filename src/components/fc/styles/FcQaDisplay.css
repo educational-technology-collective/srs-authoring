@@ -3,32 +3,17 @@
     flex-direction: column;
 }
 
-#fcForm {
-    display: grid;
-    grid-template-columns: 10% 90%;
-}
-
-.fcFormLabel {
-    grid-column: 1 / 2;
-    text-align: right;
-}
-
-.fcFormInput {
-    grid-column: 2 / 3;
-    margin-left: 2px;
-}
-
-#fcFormQuestions {
+#fcQaQuestions {
     resize: none;
     word-wrap: break-word;
 }
 
-#fcFormAnswers {
+#fcQaAnswers {
     resize: none;
     word-wrap: break-word;
 }
 
-#fcFormSource {
+#fcQaSource {
     resize: none;
     word-wrap: break-word;
 }

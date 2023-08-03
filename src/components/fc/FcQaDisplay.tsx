@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React from "react";
 import { Lm } from "../../types";
 
 import { FcToolbar } from ".";
@@ -19,70 +19,50 @@ const FcQaDisplay = ({
   fcIndex,
   setFcIndex,
 }: Props) => {
-  // Buffer states to hold temporary data.
-  const [qBuffer, setQBuffer] = useState(
-    lmArray[lmIndex].flashcards[fcIndex].content.question
-  );
-  const [aBuffer, setABuffer] = useState(
-    lmArray[lmIndex].flashcards[fcIndex].content.answer as string
-  );
-  const [srcBuffer, setSrcBuffer] = useState(
-    lmArray[lmIndex].flashcards[fcIndex].source
-  );
+  const handleQUpdate = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    let newLmArray = [...lmArray];
+    newLmArray[lmIndex].flashcards[fcIndex].content.question = e.target.value;
+    setLmArray(newLmArray);
+  };
 
-  useEffect(() => {
-    if (lmArray[lmIndex].flashcards.length > 0) {
-      setQBuffer(lmArray[lmIndex].flashcards[fcIndex].content.question);
-      setABuffer(lmArray[lmIndex].flashcards[fcIndex].content.answer as string);
-    }
-  }, [lmArray[lmIndex].flashcards, fcIndex]);
+  const handleAnsUpdate = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    let newLmArray = [...lmArray];
+    newLmArray[lmIndex].flashcards[fcIndex].content.answer = e.target.value;
+    setLmArray(newLmArray);
+  };
+
+  const handleSrcUpdate = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    let newLmArray = [...lmArray];
+    newLmArray[lmIndex].flashcards[fcIndex].source = e.target.value;
+    setLmArray(newLmArray);
+  };
 
   return (
     <div id="fcQaDisplayContainer">
-      <form id="fcForm">
-        <label className="fcFormLabel" htmlFor="question">
-          Q:
-        </label>
-        <textarea
-          id="fcFormQuestions"
-          className="fcFormInput"
-          rows={8}
-          name="question"
-          value={qBuffer}
-          onChange={(e) => setQBuffer(e.target.value)}
-        />
-        <label className="fcFormLabel" htmlFor="answers">
-          A:
-        </label>
-        <textarea
-          id="fcFormAnswers"
-          className="fcFormInput"
-          rows={13}
-          name="answers"
-          value={aBuffer}
-          onChange={(e) => setABuffer(e.target.value)}
-        />
-        <label className="fcFormLabel" htmlFor="source">
-          S:
-        </label>
-        <textarea
-          id="fcFormSource"
-          className="fcFormInput"
-          rows={1}
-          name="source"
-          value={srcBuffer}
-          onChange={(e) => setSrcBuffer(e.target.value)}
-        />
-      </form>
+      <textarea
+        id="fcQaQuestions"
+        rows={8}
+        name="question"
+        onChange={(e) => handleQUpdate(e)}
+      />
+      <textarea
+        id="fcQaAnswers"
+        rows={13}
+        name="answers"
+        onChange={(e) => handleAnsUpdate(e)}
+      />
+      <textarea
+        id="fcQaSource"
+        rows={1}
+        name="source"
+        onChange={(e) => handleSrcUpdate(e)}
+      />
       <FcToolbar
         lmArray={lmArray}
         setLmArray={setLmArray}
         lmIndex={lmIndex}
         fcIndex={fcIndex}
         setFcIndex={setFcIndex}
-        qBuffer={qBuffer}
-        aBuffer={aBuffer}
-        srcBuffer={srcBuffer}
       />
     </div>
   );

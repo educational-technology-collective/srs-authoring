@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import { makeGetReqWithParam } from "./utils";
+import { AUTH0_AUDIENCE, makeGetReqWithParam } from "./utils";
 import { Lm } from "./types";
 
 import { LandingPage, LogoutButton, PreviewPane } from "./components";
@@ -16,7 +16,7 @@ function App() {
       // Get access token from Auth0 so that we can access protected API routes.
       getAccessTokenSilently({
         authorizationParams: {
-          audience: "https://auth0-jwt-authorizer",
+          audience: AUTH0_AUDIENCE,
         },
       }).then((accessToken) => {
         chrome.storage.session.set({ accessToken: accessToken });
@@ -109,7 +109,7 @@ function App() {
               />
             </div>
             <div id="authPane">
-              <p>Welcone, {user?.name}.</p>
+              <p>Welcome, {user?.name}.</p>
               <div id="spacer"></div>
               <LogoutButton />
             </div>

@@ -7,3 +7,4 @@ export { FcToolbar } from "./FcToolbar";
 export { FcCreator } from "./FcCreator";
 export { FcVisibilityDropdown } from "./FcVisibilityDropdown";
 export { FcDropdownItem } from "./FcDropdownItem";
+export { FcMcqChoice } from "./FcMcqChoice";
