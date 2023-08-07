@@ -38,7 +38,7 @@ const FcCreator = ({ lmArray, setLmArray, lmIndex, setFcIndex }: Props) => {
     // Push changes to server.
     const payload = newFc;
     console.log("payload:", payload);
-    makePostReq("/flashcards", payload)
+    makePostReq("/fcs", payload)
       .then((res) => {
         newFc._id = res._id;
       })

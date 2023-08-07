@@ -71,7 +71,7 @@ const LmToolbar = ({
 
     if (lmArray.length > 0) {
       // Push changes to server.
-      makeDeleteReq(`/lms/id/${lmArray[lmIndex]._id}`);
+      makeDeleteReq(`/lms/${lmArray[lmIndex]._id}`);
 
       newLmArray.splice(lmIndex, 1);
 
