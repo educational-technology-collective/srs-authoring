@@ -99,9 +99,9 @@ const LmToolbar = ({
         lmIndex={lmIndex}
       />
       <button form="lmForm" onClick={handleSubmit}>
-        Submit
+        Save Changes
       </button>
-      <button onClick={handleDelete}>Delete</button>
+      <button onClick={handleDelete}>Delete LM</button>
     </div>
   );
 };
