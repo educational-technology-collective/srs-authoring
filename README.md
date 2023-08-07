@@ -204,7 +204,7 @@ Below is the tree that lists out our proposed endpoints.
 /{id}
 `DELETE` (authoring)
 /{userId}
-/flashcards
+/fcs
 /now
 `GET` (mobile)
 /{lmId}
@@ -253,7 +253,7 @@ Below is the tree that lists out our proposed endpoints.
 
 #### Mobile App
 
-- `GET /api/v1/{userId}/flashcards/now`
+- `GET /api/v1/{userId}/fcs/now`
   - Gets a 2D list of flashcards for review today.
   - Reads from userStates_fcs view.
 - `PUT /api/v1/{userId}/{lmId}`

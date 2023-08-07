@@ -36,7 +36,7 @@ const FcToolbar = ({
     // Push changes to server.
     const payload = lmArray[lmIndex].flashcards[fcIndex];
     console.log("payload:", payload);
-    makePutReq("/flashcards", payload);
+    makePutReq("/fcs", payload);
 
     // Push changes locally.
     setLmArray(lmArray);
@@ -48,9 +48,7 @@ const FcToolbar = ({
 
     if (lmArray[lmIndex].flashcards.length > 0) {
       // Push changes to server.
-      makeDeleteReq(
-        `/flashcards/id/${lmArray[lmIndex].flashcards[fcIndex]._id}`
-      );
+      makeDeleteReq(`/fcs/${lmArray[lmIndex].flashcards[fcIndex]._id}`);
 
       newLmArray[lmIndex].flashcards.splice(fcIndex, 1);
 
@@ -74,6 +72,7 @@ const FcToolbar = ({
     <div id="fcToolbarContainer">
       <FcVisibilityDropdown
         lmArray={lmArray}
+        setLmArray={setLmArray}
         lmIndex={lmIndex}
         fcIndex={fcIndex}
       />

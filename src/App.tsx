@@ -68,7 +68,7 @@ function App() {
         ]);
 
         for (let i = 0; i < lms.length; ++i) {
-          const fcs = await makeGetReqWithParam("/flashcards/search", [
+          const fcs = await makeGetReqWithParam("/fcs/search", [
             ["lm_id", lms[i]._id],
           ]);
 

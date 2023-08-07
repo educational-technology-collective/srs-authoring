@@ -1,4 +1,4 @@
-import { Flashcard, Lm } from "../../types";
+import { CourseraPlaybackLm, Lm } from "../../types";
 import { makePutReq } from "../../utils";
 
 import { FcDropdownItem } from ".";
@@ -6,23 +6,30 @@ import "./styles/FcVisibilityDropdown.css";
 
 interface Props {
   lmArray: Lm[];
+  setLmArray: React.Dispatch<React.SetStateAction<Lm[]>>;
   lmIndex: number;
   fcIndex: number;
 }
 
-const FcVisibilityDropdown = ({ lmArray, lmIndex, fcIndex }: Props) => {
+const FcVisibilityDropdown = ({
+  lmArray,
+  setLmArray,
+  lmIndex,
+  fcIndex,
+}: Props) => {
   const handleChange = () => {
     if (lmArray[lmIndex].flashcards.length > 0) {
       const e = document.getElementById("fcSelectMenu") as HTMLSelectElement;
-      const newFcArray: Flashcard[] = JSON.parse(
-        JSON.stringify(lmArray[lmIndex].flashcards)
-      );
-      newFcArray[fcIndex].visibility = e.value;
+      const newLmArray: CourseraPlaybackLm[] = [
+        ...(lmArray as CourseraPlaybackLm[]),
+      ];
+      newLmArray[lmIndex].flashcards[fcIndex].visibility = e.value;
+      setLmArray(newLmArray);
 
       // Push changes to server.
-      const payload = newFcArray[fcIndex];
+      const payload = newLmArray[lmIndex].flashcards[fcIndex];
       console.log("payload:", payload);
-      makePutReq("/flashcards", payload);
+      makePutReq("/fcs", payload);
     }
   };
 
