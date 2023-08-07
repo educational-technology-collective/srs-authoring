@@ -68,7 +68,7 @@ const LmCreator = ({ lmArray, setLmArray, setLmIndex, url }: Props) => {
       >
         <LmDropdownItem value={"playback"} />;
       </select>
-      <button onClick={handleSubmit}>Create</button>
+      <button onClick={handleSubmit}>Create New LM</button>
     </div>
   );
 };

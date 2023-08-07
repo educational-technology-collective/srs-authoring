@@ -71,7 +71,7 @@ const FcMcqDisplay = ({
     <div id="fcMcqDisplayContainer">
       <textarea
         id="fcMcqQuestion"
-        rows={8}
+        rows={6}
         name="question"
         value={lmArray[lmIndex].flashcards[fcIndex].content.question}
         onChange={(e) => handleQUpdate(e)}
