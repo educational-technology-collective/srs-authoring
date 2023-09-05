@@ -1,6 +1,7 @@
 import { IonButton } from "@ionic/react";
 import "./MCQChoice.css";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+import rehypeRaw from "rehype-raw";
 
 // Incorrect Option Component
 export const IncorrectChoice: React.FC<{
@@ -31,6 +32,7 @@ export const IncorrectChoice: React.FC<{
   return (
     <IonButton className={buttonStyle}>
       <ReactMarkdown
+        rehypePlugins={[rehypeRaw]}
         className="choice-text"
         children={choiceText}
       ></ReactMarkdown>
@@ -62,6 +64,7 @@ export const CorrectChoice: React.FC<{
   return (
     <IonButton className={buttonStyle}>
       <ReactMarkdown
+        rehypePlugins={[rehypeRaw]}
         className="choice-text"
         children={choiceText}
       ></ReactMarkdown>

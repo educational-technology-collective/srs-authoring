@@ -30,6 +30,7 @@ const FcMcqChoice = ({
         id="fcMcqOption"
         rows={2}
         value={option}
+        placeholder="Your answer here..."
         onChange={(e) => handleOptionUpdate(e, mcqIndex)}
       />
       <div id="fcMcqChoiceBottomBarContainer">

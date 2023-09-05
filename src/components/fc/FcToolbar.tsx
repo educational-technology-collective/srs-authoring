@@ -30,6 +30,13 @@ const FcToolbar = ({
     setLmArray(newLmArray);
   };
 
+  const handleSrcChange = (src: string) => {
+    const newLmArray = [...lmArray];
+    newLmArray[lmIndex].flashcards[fcIndex].source = src;
+
+    setLmArray(newLmArray);
+  };
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
@@ -70,17 +77,26 @@ const FcToolbar = ({
 
   return (
     <div id="fcToolbarContainer">
-      <FcVisibilityDropdown
-        lmArray={lmArray}
-        setLmArray={setLmArray}
-        lmIndex={lmIndex}
-        fcIndex={fcIndex}
+      <textarea
+        id="fcSource"
+        rows={1}
+        placeholder="Source"
+        value={lmArray[lmIndex].flashcards[fcIndex].source}
+        onChange={(e) => handleSrcChange(e.target.value)}
       />
-      {lmArray[lmIndex].flashcards[fcIndex].type === "mcq" && (
-        <button onClick={handleAdd}>Add Choice</button>
-      )}
-      <button onClick={handleSubmit}>Save Changes</button>
-      <button onClick={handleDelete}>Delete Flashcard</button>
+      <div id="fcToolbarInnerContainer">
+        <FcVisibilityDropdown
+          lmArray={lmArray}
+          setLmArray={setLmArray}
+          lmIndex={lmIndex}
+          fcIndex={fcIndex}
+        />
+        {lmArray[lmIndex].flashcards[fcIndex].type === "mcq" && (
+          <button onClick={handleAdd}>Add Choice</button>
+        )}
+        <button onClick={handleSubmit}>Save Changes</button>
+        <button onClick={handleDelete}>Delete Flashcard</button>
+      </div>
     </div>
   );
 };
