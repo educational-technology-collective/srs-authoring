@@ -1,10 +1,10 @@
-import { API_GATEWAY } from "./constants";
+import { API_GATEWAY_DEV } from "./constants";
 
 // makes a POST request to the given endpoint of the AWS Lambda instance.
 // endpoint should lead with a slash.
 export const makePostReq = async (endpoint: string, payload: object) => {
   try {
-    const url = API_GATEWAY + endpoint;
+    const url = API_GATEWAY_DEV + endpoint;
     const token = await chrome.storage.session.get(["accessToken"]);
     const resp = await fetch(url, {
       method: "POST",
@@ -27,7 +27,7 @@ export const makePostReq = async (endpoint: string, payload: object) => {
 // endpoint should lead with a slash.
 export const makeGetReq = async (endpoint: string) => {
   try {
-    const url = API_GATEWAY + endpoint;
+    const url = API_GATEWAY_DEV + endpoint;
     const resp = await fetch(url, {
       method: "GET",
       headers: {
@@ -60,7 +60,7 @@ export const makeGetReqWithParam = async (
     });
     paramStr = paramStr.substring(0, paramStr.length - 1);
     console.log(paramStr);
-    const url = API_GATEWAY + endpoint + paramStr;
+    const url = API_GATEWAY_DEV + endpoint + paramStr;
     const resp = await fetch(url, {
       method: "GET",
       headers: {
@@ -80,7 +80,7 @@ export const makeGetReqWithParam = async (
 // endpoint should lead with a slash.
 export const makePutReq = async (endpoint: string, payload: object) => {
   try {
-    const url = API_GATEWAY + endpoint;
+    const url = API_GATEWAY_DEV + endpoint;
     const token = await chrome.storage.session.get(["accessToken"]);
     const resp = await fetch(url, {
       method: "PUT",
@@ -103,7 +103,7 @@ export const makePutReq = async (endpoint: string, payload: object) => {
 // endpoint should lead with a slash.
 export const makeDeleteReq = async (endpoint: string) => {
   try {
-    const url = API_GATEWAY + endpoint;
+    const url = API_GATEWAY_DEV + endpoint;
     const token = await chrome.storage.session.get(["accessToken"]);
     const resp = await fetch(url, {
       method: "DELETE",
@@ -138,7 +138,7 @@ export const makeDeleteReqWithParam = async (
     });
     paramStr = paramStr.substring(0, paramStr.length - 1);
     console.log(paramStr);
-    const url = API_GATEWAY + endpoint + paramStr;
+    const url = API_GATEWAY_DEV + endpoint + paramStr;
     const token = await chrome.storage.session.get(["accessToken"]);
     const resp = await fetch(url, {
       method: "DELETE",
