@@ -26,8 +26,10 @@ const FcCreator = ({ lmArray, setLmArray, lmIndex, setFcIndex }: Props) => {
         answer:
           typeBuffer === "mcq"
             ? [
-                { option: "Your_answer_here", isCorrect: true },
-                { option: "Your_answer_here", isCorrect: false },
+                { option: "", isCorrect: true },
+                { option: "", isCorrect: false },
+                { option: "", isCorrect: false },
+                { option: "", isCorrect: false },
               ]
             : "",
       },
